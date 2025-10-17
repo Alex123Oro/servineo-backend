@@ -22,9 +22,15 @@
   "author": "",
   "license": "MIT",
   "type": "module",
+   "repository": {
+    "type": "git",
+    "url": "git+,
   "bugs": {
     "url": "https://github.com/Servineo/servineo-backend/issues"
   },
+
+
+   
   "homepage": "https://github.com/Servineo/servineo-backend#readme",
   "dependencies": {
     "cors": "^2.8.5",
