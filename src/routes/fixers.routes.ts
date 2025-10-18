@@ -13,7 +13,7 @@ const fixers = JSON.parse(
 
 const router = Router();
 
-router.get('/api/fixers', (req, res) => {
+router.get('/', (req, res) => {
   res.json(fixers);
 });
 
