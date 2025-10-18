@@ -1,7 +1,7 @@
 import Server from './config/server.config.js';
 import { SERVER_PORT } from './config/env.config.js';
 
-async function startServer() {
+async function startServer(): Promise<void> {
   try {
     Server.listen(SERVER_PORT, () => {
       console.info(`Server running on http://localhost:${SERVER_PORT}`);

@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "rootDir": "./src",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "outDir": "./dist",
-    "esModuleInterop": true,
-    "strict": true,
-    "skipLibCheck": true
+    "target": "ES2020",                 // Genera JS moderno compatible con Node.js actual
+    "module": "ESNext",                 // Soporte para import/export moderno
+    "rootDir": "./src",                 // Carpeta raíz de tus TS
+    "outDir": "./dist",                 // Carpeta donde se generará JS
+    "moduleResolution": "node",         // Resolución de módulos al estilo Node
+    "esModuleInterop": true,            // Facilita importar CommonJS
+    "resolveJsonModule": true,          // Permite importar JSON directamente
+    "strict": true,                     // Habilita todas las comprobaciones estrictas
+    "skipLibCheck": true,               // Evita revisar tipos de librerías externas
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true                   // Opcional: genera mapas de fuentes para debugging
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts"],           // Incluye todos los .ts dentro de src
   "exclude": ["node_modules", "**/*.spec.ts"]
 }
