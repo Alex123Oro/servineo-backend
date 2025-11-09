@@ -3,5 +3,5 @@ import * as notificationController from './notification.controller';
 
 const router =  Router();
 router.get('/',notificationController.getAllNotification);
-router.get('/tipo/:notification_type',notificationController.getNotificationByType);
+router.get('/tipo/:notification_t ype',notificationController.getNotificationByType);
 export default router; 
