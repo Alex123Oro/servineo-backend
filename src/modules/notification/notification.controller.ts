@@ -33,4 +33,24 @@ export async function getNotificationByType(req:Request, res:Response):Promise<R
 
     
 }
+//marcar notificacion como leida
+export async function markNotificationAsReadAddController(req: Request,res: Response):Promise<Response>{
+    try{
+        const {id}=req.params;
+        const notificacion = await Notification.findByIdAndUpdate(id,{leido:true},{new:true});
+        if(!notificacion){
+            return res.status(404).json({
+                message:'notificacion no encontrada'
+            });
+        }
+        return res.status(200).json(notificacion);
+
+    }catch(error:any){
+        console.error('error al marcar una notificacion')
+        return res.status(500).json({
+            message: 'error al marcar notificacion'
+        })
+
+    }
+}
     

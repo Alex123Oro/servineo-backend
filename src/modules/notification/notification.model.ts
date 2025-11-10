@@ -16,6 +16,7 @@ export interface INotification extends Document {
   tipo: string;
   updatedAt: any;
   users_id: mongoose.Types.ObjectId;
+  leido: boolean;
 }
 // esquema de mongoose
 const notificationSchema= new Schema <INotification>
@@ -59,7 +60,11 @@ const notificationSchema= new Schema <INotification>
         },
         users_id: {
             type: mongoose.Schema.Types.Mixed
+        },
+        leido:{
+            type: Boolean,default:false,required:true
         }
+
 
     },{
         timestamps:false, //desactivamos los timestamps porque ya estan en el esquema
