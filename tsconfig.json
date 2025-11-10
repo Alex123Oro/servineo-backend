@@ -1,14 +1,19 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ES2022",
+    "module": "Commonjs",
     "rootDir": "./src",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "outDir": "./dist",
     "esModuleInterop": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules", "**/*.spec.ts"],
+  "ts-node": {
+    "esm": true
+  }
 }
