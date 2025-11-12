@@ -1,5 +1,5 @@
-import bcrypt from "bcryptjs";
-import { connectDB } from "../../../../conecionMongodb/mongodb.js";
+import bcrypt from "bcrypt";
+import { connectDB } from "../../../../conecionMongodb/mongodb";
 import { ObjectId } from "mongodb";
 
 export const cambiarContrasenaService = async (userId: string, newPassword: string) => {

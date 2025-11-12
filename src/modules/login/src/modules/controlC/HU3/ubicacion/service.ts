@@ -1,4 +1,4 @@
-import clientPromise from "../../config/mongodb.js";
+import clientPromise from "../../config/mongodb";
 
 export const guardarUbicacionUsuario = async (
   email: string,

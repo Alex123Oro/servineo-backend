@@ -1,5 +1,5 @@
 import express from "express";
-import { obtenerDatosUsuario, actualizarDatosUsuario } from "./controller.js";
+import { obtenerDatosUsuario, actualizarDatosUsuario } from "./controller";
 
 const router = express.Router();
 

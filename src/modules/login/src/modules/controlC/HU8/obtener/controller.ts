@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { cambiarContrasenaService } from "./service.js";
+import { cambiarContrasenaService } from "./service";
 
 export const cambiarContrasena = async (req: Request, res: Response) => {
   const { id } = req.params;

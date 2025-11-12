@@ -1,5 +1,5 @@
 import { OAuth2Client } from "google-auth-library";
-import clientPromise from "../../config/mongodb.js";
+import clientPromise from "../../config/mongodb";
 import { ObjectId } from "mongodb";
 
 interface GoogleUser {
@@ -14,12 +14,12 @@ interface User extends GoogleUser {
   url_photo: string;
 }
 
-const client = new OAuth2Client(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export async function verifyGoogleToken(token: string): Promise<GoogleUser | null> {
   const ticket = await client.verifyIdToken({
     idToken: token,
-    audience: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    audience: process.env.GOOGLE_CLIENT_ID,
   });
 
   const payload = ticket.getPayload();

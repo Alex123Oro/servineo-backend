@@ -1,5 +1,5 @@
 import express from "express";
-import { cambiarContrasena } from "./controller.js";
+import { cambiarContrasena } from "./controller";
 
 const router = express.Router();
 

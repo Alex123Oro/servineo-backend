@@ -1,6 +1,6 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import { connectDB } from "../../../../conecionMongodb/mongodb.js";
+import bcrypt from "bcrypt";
+import { connectDB } from "../../../../conecionMongodb/mongodb";
 import { ObjectId } from "mongodb";
 
 const JWT_SECRET = process.env.JWT_SECRET || "servineosecretkey";

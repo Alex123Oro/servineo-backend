@@ -1,6 +1,6 @@
 // src/modules/auth/auth.controller.ts
 import { Request, Response } from 'express';
-import { connectDB } from '../../config/db/mongoClient.js';
+import { connectDB } from '../../config/db/mongoClient';
 import bcrypt from 'bcryptjs';
 import { OAuth2Client } from "google-auth-library";
 // Login con base de datos real
@@ -23,12 +23,8 @@ export const loginUsuario = async (req: Request, res: Response) => {
       return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
     }
 
-    // Comparar contraseñas soportando usuarios antiguos (password) y nuevos (passwordHash)
-    const storedHash: string | undefined = (user as any).passwordHash || (user as any).password;
-    if (!storedHash) {
-      return res.status(400).json({ success: false, message: 'Usuario sin contraseña. Use Google o restablezca.' });
-    }
-    const passwordMatch = await bcrypt.compare(password, storedHash);
+    // Comparar contraseñas
+    const passwordMatch = await bcrypt.compare(password, user.passwordHash);
 
     if (!passwordMatch) {
       return res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
@@ -50,7 +46,7 @@ export const loginUsuario = async (req: Request, res: Response) => {
     console.error('Error al iniciar sesión:', error);
     return res.status(500).json({ success: false, message: 'Error en el servidor' });
   }
-};const client = new OAuth2Client(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
+};const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export const loginGoogle = async (req: Request, res: Response) => {
   const { credential } = req.body;
@@ -62,7 +58,7 @@ export const loginGoogle = async (req: Request, res: Response) => {
   try {
     const ticket = await client.verifyIdToken({
       idToken: credential,
-      audience: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+      audience: process.env.GOOGLE_CLIENT_ID,
     });
 
     const payload = ticket.getPayload();
@@ -98,38 +94,5 @@ export const loginGoogle = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error en login con Google:", error);
     return res.status(500).json({ success: false, message: "Error al verificar el token de Google" });
-  }
-};
-export const registerUsuario = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
-  if (!name || !email || !password) {
-    return res.status(400).json({ success: false, message: 'Faltan datos' });
-  }
-
-  try {
-    const db = await connectDB();
-    const usersCollection = db.collection('users');
-
-    const exists = await usersCollection.findOne({ email });
-    if (exists) {
-      return res.status(400).json({ success: false, message: 'El usuario ya existe' });
-    }
-
-    const passwordHash = await bcrypt.hash(password, 10);
-    const userDoc = {
-      name,
-      email,
-      passwordHash,
-      role: 'requester',
-      language: 'es',
-      url_photo: '',
-      createdAt: new Date(),
-    };
-    await usersCollection.insertOne(userDoc);
-
-    return res.status(201).json({ success: true, message: 'Usuario registrado' });
-  } catch (error) {
-    console.error('Error al registrar usuario:', error);
-    return res.status(500).json({ success: false, message: 'Error en el servidor' });
   }
 };
