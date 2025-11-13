@@ -3,16 +3,17 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-function getEnvVar(name: string): string {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(`❌ La variable de entorno ${name} no está definida`);
+// Helper: obtiene la primera variable definida entre las candidatas
+function getEnvVar(...names: string[]): string {
+  for (const name of names) {
+    const v = process.env[name];
+    if (typeof v === "string" && v.length > 0) return v;
   }
-  return value;
+  throw new Error("❌ No se encontró MONGO_URI ni MONGODB_URI en variables de entorno");
 }
 
-const uri = getEnvVar("MONGO_URI");
-const dbName = getEnvVar("DB_NAME");
+const uri: string = getEnvVar("MONGO_URI", "MONGODB_URI");
+const dbName: string = process.env.DB_NAME || "ServineoBD";
 
 let client: MongoClient | null = null;
 let db: Db | null = null;

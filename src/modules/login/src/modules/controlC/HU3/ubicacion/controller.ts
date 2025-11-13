@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { guardarUbicacionUsuario } from "./service";
+import { guardarUbicacionUsuario } from "./service.js";
 
 export const registrarUbicacion = async (req: Request, res: Response) => {
   const { lat, lng, direccion, departamento, pais } = req.body;

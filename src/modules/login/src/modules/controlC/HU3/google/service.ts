@@ -1,5 +1,5 @@
 import { OAuth2Client } from "google-auth-library";
-import clientPromise from "../../config/mongodb";
+import clientPromise from "../../config/mongodb.js";
 import { ObjectId } from "mongodb";
 
 interface GoogleUser {

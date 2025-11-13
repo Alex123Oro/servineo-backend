@@ -1,4 +1,4 @@
-import clientPromise from '../../config/mongodb';
+import clientPromise from '../../config/mongodb.js';
 
 interface ManualUser {
   email: string;

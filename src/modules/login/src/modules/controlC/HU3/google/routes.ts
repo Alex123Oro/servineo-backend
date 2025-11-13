@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { googleAuth, verifyJWT } from "./controller";
+import { googleAuth, verifyJWT } from "./controller.js";
 
 const router = Router();
 

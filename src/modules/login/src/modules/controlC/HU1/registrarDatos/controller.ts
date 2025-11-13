@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { checkUserExists, createManualUser } from './service';
+import { checkUserExists, createManualUser } from './service.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_key';
 

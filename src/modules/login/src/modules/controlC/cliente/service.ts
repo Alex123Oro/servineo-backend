@@ -1,4 +1,4 @@
-import clientPromise from "../config/mongodb";
+import clientPromise from "../config/mongodb.js";
 import { ObjectId } from "mongodb";
 
 export interface LoginMethod {

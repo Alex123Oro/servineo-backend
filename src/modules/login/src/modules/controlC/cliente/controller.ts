@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { ObjectId } from "mongodb";
-import { getClientById} from "./service";
+import { getClientById} from "./service.js";
 import bcrypt from "bcryptjs";
-import clientPromise from "../config/mongodb";
+import clientPromise from "../config/mongodb.js";
+import { actualizarDatosUsuarioService } from "../HU5/modificarDatos/service.js";
 
 export async function getClientProfile(req: Request, res: Response) {
   try {
@@ -21,6 +22,40 @@ export async function getClientProfile(req: Request, res: Response) {
   } catch (err) {
     console.error("Error en getClientProfile:", err);
     return res.status(500).json({ status: "error", message: "Error interno del servidor" });
+  }
+}
+
+// Actualiza perfil del cliente (telefono y ubicacion) aceptando payloads duplicados
+export async function updateClientProfile(req: Request, res: Response) {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader?.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "No autorizado" });
+    }
+    const token = authHeader.split(" ")[1];
+
+    const body = req.body || {};
+    // aceptar ambos nombres: telefono/phone y ubicacion/location
+    const telefono = body.telefono ?? body.phone ?? "";
+    const loc = body.ubicacion ?? body.location ?? {};
+
+    const ubicacion = {
+      lat: Number(loc.lat ?? 0),
+      lng: Number(loc.lng ?? 0),
+      direccion: String(loc.direccion ?? loc.address ?? ""),
+      departamento: String(loc.departamento ?? loc.state ?? ""),
+      pais: String(loc.pais ?? loc.country ?? ""),
+    };
+
+    await actualizarDatosUsuarioService(token, { telefono, ubicacion });
+
+    return res.status(200).json({ success: true });
+  } catch (error: any) {
+    if (error?.code === "PHONE_TAKEN") {
+      return res.status(409).json({ error: "PHONE_TAKEN", message: "Número ya registrado" });
+    }
+    console.error("Error en updateClientProfile:", error);
+    return res.status(500).json({ success: false, message: error?.message || "Error interno del servidor" });
   }
 }
 

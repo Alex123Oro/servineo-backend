@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { connectDB } from '../../config/mongoClient';
+import { connectDB } from '../../config/mongoClient.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { googleAuth } from '../../HU3/google/controller';
+import { googleAuth } from '../../HU3/google/controller.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_key';
 

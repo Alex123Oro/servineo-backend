@@ -1,5 +1,5 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { connectDB } from "../../config/mongoClient";
+import { connectDB } from "../../config/mongoClient.js";
 import { ObjectId } from "mongodb";
 
 const JWT_SECRET = process.env.JWT_SECRET || "super_secret_key";

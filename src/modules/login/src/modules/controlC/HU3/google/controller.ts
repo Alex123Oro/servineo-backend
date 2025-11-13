@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { verifyGoogleToken, findUserByEmail, createUser } from "./service";
+import { verifyGoogleToken, findUserByEmail, createUser } from "./service.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "super_secret_key";
 

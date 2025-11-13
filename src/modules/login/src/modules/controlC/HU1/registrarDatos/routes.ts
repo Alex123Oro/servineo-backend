@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { manualRegister } from './controller';
+import { manualRegister } from './controller.js';
 
 const router = Router();
 
-// Ruta para el registro manual
+// Registro manual: POST /api/controlC/registro/manual
 router.post('/manual', manualRegister);
 
 export default router;

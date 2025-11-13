@@ -1,6 +1,6 @@
 // src/modules/auth/auth.controller.ts
 import { Request, Response } from 'express';
-import { connectDB } from '../../config/db/mongoClient';
+import { connectDB } from '../../config/db/mongoClient.js';
 import bcrypt from 'bcryptjs';
 import { OAuth2Client } from "google-auth-library";
 // Login con base de datos real
