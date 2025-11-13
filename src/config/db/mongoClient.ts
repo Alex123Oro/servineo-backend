@@ -11,7 +11,7 @@ function getEnvVar(name: string): string {
   return value;
 }
 
-const uri = getEnvVar("MONGO_URI");
+const uri = getEnvVar("MONGODB_URI");
 const dbName = getEnvVar("DB_NAME");
 
 let client: MongoClient | null = null;
@@ -25,10 +25,10 @@ export async function connectDB(): Promise<Db> {
     await client.connect();
 
     db = client.db(dbName);
-    console.log(`✅ Conectado correctamente a MongoDB: ${dbName}`);
+    console.log(`Conectado correctamente a MongoDB: ${dbName}`);
     return db;
   } catch (error) {
-    console.error("❌ Error al conectar a MongoDB:", error);
+    console.error("Error al conectar a MongoDB:", error);
     throw error;
   }
 }
@@ -36,7 +36,7 @@ export async function connectDB(): Promise<Db> {
 export async function closeDB(): Promise<void> {
   if (client) {
     await client.close();
-    console.log("🔒 Conexión cerrada a MongoDB");
+    console.log("Conexión cerrada a MongoDB");
     client = null;
     db = null;
   }
