@@ -2,8 +2,7 @@ import { Request, Response } from 'express';
 import { connectDB } from '../../../config/db/mongoClient';
 import bcrypt from 'bcryptjs';
 import { generarToken } from '../../../utils/generadorToken';
-import { googleAuth } from '../userManagement/google.controller';
-import { ObjectId } from 'mongodb';
+import { verifyGoogleToken, findUserByEmail } from "../../../services/userManagement/google.service";
 
 export const loginUsuario = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -80,5 +79,58 @@ export const loginUsuario = async (req: Request, res: Response) => {
 };
 
 export const loginGoogle = async (req: Request, res: Response) => {
-  return googleAuth(req, res);
+  const { token } = req.body;
+
+  if (!token) {
+    return res.status(400).json({
+      success: false,
+      message: "Token no recibido",
+    });
+  }
+
+  try {
+    const googleUser = await verifyGoogleToken(token);
+
+    if (!googleUser || !googleUser.email) {
+      return res.status(400).json({
+        success: false,
+        message: "Token inválido",
+      });
+    }
+
+    const dbUser = await findUserByEmail(googleUser.email);
+
+    if (!dbUser) {
+      return res.status(404).json({
+        success: false,
+        message: "Usuario no registrado. Por favor regístrate.",
+      });
+    }
+
+    const sessionToken = generarToken(
+      dbUser._id.toHexString(),
+      dbUser.name,
+      dbUser.email,
+      dbUser.url_photo
+    );
+
+    return res.json({
+      success: true,
+      message: "Inicio de sesión exitoso",
+      token: sessionToken,
+      user: {
+        id: dbUser._id.toHexString(),
+        name: dbUser.name,
+        email: dbUser.email,
+        picture: dbUser.url_photo,
+      },
+    });
+
+  } catch (error) {
+    console.error("Error en loginGoogle:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Error interno del servidor",
+    });
+  }
 };

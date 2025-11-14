@@ -4,13 +4,12 @@ const JWT_SECRET: jwt.Secret = process.env.JWT_SECRET || "super_secret_key";
 
 export function generarToken(
   id: string,
-  nombre: string,
+  name: string,
   email: string,
   picture?: string,
-  message: string = "hola",
   expiresIn: SignOptions["expiresIn"] = "7d"
 ): string {
-  const payload = { id, nombre, email, picture, message };
+  const payload = { id, name, email, picture };
   return jwt.sign(payload, JWT_SECRET, { expiresIn });
 }
 
