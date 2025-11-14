@@ -20,14 +20,18 @@ export async function getGitHubUser(accessToken: string): Promise<GitHubUser | n
   const userResp = await fetch("https://api.github.com/user", {
     headers: { Authorization: `token ${accessToken}` },
   });
-  const userData = await userResp.json();
+
+  // 👇 CAST NECESARIO
+  const userData = (await userResp.json()) as any;
 
   const emailResp = await fetch("https://api.github.com/user/emails", {
     headers: { Authorization: `token ${accessToken}` },
   });
-  const emails = await emailResp.json();
-  const primaryEmail = emails.find((e: any) => e.primary)?.email;
 
+  // 👇 CAST NECESARIO
+  const emails = (await emailResp.json()) as any[];
+
+  const primaryEmail = emails.find((e: any) => e.primary)?.email;
   if (!primaryEmail) return null;
 
   return {

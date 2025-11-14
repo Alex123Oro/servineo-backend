@@ -18,7 +18,7 @@ export const registerDevice = async (req: Request, res: Response) => {
     }
 
     // Buscar si ya existe un registro con el mismo OS
-    const existingDevice = devices.find((d) => d.os === os);
+    const existingDevice = devices.find((d: any) => d.os === os);
 
     if (existingDevice) {
       existingDevice.lastLogin = new Date();

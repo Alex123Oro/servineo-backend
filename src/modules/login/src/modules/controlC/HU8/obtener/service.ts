@@ -1,4 +1,5 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
+
 import { connectDB } from "../../../../conecionMongodb/mongodb";
 import { ObjectId } from "mongodb";
 

@@ -16,7 +16,6 @@ interface User extends DiscordUser {
 }
 
 export async function getDiscordUser(accessToken: string): Promise<DiscordUser | null> {
-  // Get basic info
   const resp = await fetch("https://discord.com/api/users/@me", {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -24,15 +23,17 @@ export async function getDiscordUser(accessToken: string): Promise<DiscordUser |
   const data = await resp.json();
   if (!data) return null;
 
-  // ✅ email puede no venir → fallback
-  const email = data.email || `${data.id}@discord.local`;
+  // 👇 Cast para evitar errores TS de propiedades desconocidas
+  const d = data as any;
+
+  const email = d.email || `${d.id}@discord.local`;
 
   return {
-    discordId: data.id,
+    discordId: d.id,
     email,
-    name: data.username,
-    picture: data.avatar
-      ? `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`
+    name: d.username,
+    picture: d.avatar
+      ? `https://cdn.discordapp.com/avatars/${d.id}/${d.avatar}.png`
       : "",
   };
 }
