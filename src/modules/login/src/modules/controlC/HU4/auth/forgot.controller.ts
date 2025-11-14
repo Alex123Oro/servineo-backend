@@ -1,7 +1,7 @@
 // src/modules/controlC/HU4/auth/forgot.controller.ts
 import { Request, Response } from "express";
 import crypto from "crypto";
-import clientPromise from "../../config/mongodb";
+import clientPromise from "../../config/mongodb.js";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 
@@ -270,7 +270,8 @@ export async function forgotPassword(req: Request, res: Response) {
       },
     };
 
-    transporter.sendMail(mailOptions, (err, info) => {
+    transporter.sendMail(mailOptions, (err: Error | null, info: any) => {
+
       if (err) {
         console.error("Error enviando correo magic link:", err);
       } else {
