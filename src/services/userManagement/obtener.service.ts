@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { connectDB } from "../../config/db/mongodb";
+import { connectDB } from "../../config/db/mongoClient";
 import { ObjectId } from "mongodb";
 
 export const cambiarContrasenaService = async (userId: string, newPassword: string) => {

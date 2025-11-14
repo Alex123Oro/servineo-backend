@@ -1,3 +1,4 @@
+
 import { SERVER_PORT } from './config/env.config';
 import app from './app';
 import { connectDatabase } from './config/db.config';

@@ -1,4 +1,4 @@
-import { connectDB } from "../../config/db/mongodb";
+import { connectDB } from "../../config/db/mongoClient";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { ObjectId } from "mongodb";
 

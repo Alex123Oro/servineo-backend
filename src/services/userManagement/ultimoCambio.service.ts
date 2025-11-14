@@ -1,4 +1,4 @@
-import { connectDB } from "../../config/db/mongodb";
+import { connectDB } from "../../config/db/mongoClient";
 import { ObjectId } from "mongodb";
 
 // FUNCIÓN para verificar si tiene contraseña en cualquier estructura
