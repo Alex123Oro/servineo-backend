@@ -50,7 +50,7 @@ export async function githubAuth(req: Request, res: Response) {
     const githubUser = await getGitHubUser(accessToken);
     if (!githubUser) throw new Error("No se pudo obtener usuario GitHub");
 
-    // === 🔗 MODO VINCULACIÓN ===
+ 
     if (mode === "link" && token) {
       console.log("🔗 Modo vinculación detectado, validando token JWT...");
 
@@ -100,7 +100,7 @@ export async function githubAuth(req: Request, res: Response) {
       `);
     }
 
-    // === 🚀 LOGIN / REGISTRO NORMAL ===
+ 
     let dbUser = await findUserByEmail(githubUser.email);
     let isFirstTime = false;
 
@@ -116,15 +116,21 @@ export async function githubAuth(req: Request, res: Response) {
     );
 
     return res.send(`
-      <script>
-        window.opener.postMessage({
-          type: 'GITHUB_AUTH_SUCCESS',
-          token: '${sessionToken}',
-          isFirstTime: ${isFirstTime}
-        }, '${FRONTEND_URL}');
-        window.close();
-      </script>
-    `);
+  <script>
+      window.opener.postMessage({
+        type: 'GITHUB_AUTH_SUCCESS',
+        token: '${sessionToken}',
+        isFirstTime: ${isFirstTime},
+        user: ${JSON.stringify({
+          id: dbUser._id.toHexString(),
+          name: dbUser.name,
+          email: dbUser.email,
+          photo: dbUser.url_photo || null,
+        })}
+      }, '${FRONTEND_URL}');
+      window.close();
+    </script>
+  `);
   } catch (err: any) {
     console.error("Error en GitHub OAuth:", err.message);
     res.send(`
