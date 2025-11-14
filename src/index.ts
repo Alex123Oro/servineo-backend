@@ -23,9 +23,9 @@ import githubAuthRouter from '../src/api/routes/userManagement/github.routes';
 import discordRoutes from '../src/api/routes/userManagement/discord.routes';
 import clienteRouter from '../src/api/routes/userManagement/cliente.routes';
 
-///////////////////
+
 import obtenerContrasenaRouter from '../src/api/routes/userManagement/obtener.routes';
-///////////////////
+
 const app = express();
 
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));

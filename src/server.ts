@@ -5,18 +5,18 @@ import { startJobsStatusCollectorCron } from './services/jobs-status-collector.c
 
 async function startServer() {
   try {
-    // 🔌 1️⃣ Conectamos a la base de datos antes de iniciar el servidor
+    // Conectamos a la base de datos antes de iniciar el servidor
     await connectDatabase();
 
-    // 🚀 2️⃣ Iniciamos el servidor Express
+    // Iniciamos el servidor Express
     app.listen(SERVER_PORT, () => {
-      console.info(`✅ Server running on http://localhost:${SERVER_PORT}`);
+      console.info(` Server running on http://localhost:${SERVER_PORT}`);
     });
 
-    // 📊 3️⃣ Iniciamos el cron job para recolección de estado de jobs
+    // Iniciamos el cron job para recolección de estado de jobs
     startJobsStatusCollectorCron();
   } catch (error) {
-    console.error('❌ Error starting server:', error);
+    console.error(' Error starting server:', error);
     process.exit(1);
   }
 }
