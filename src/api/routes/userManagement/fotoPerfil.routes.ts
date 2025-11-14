@@ -1,17 +1,9 @@
-import { Request, Response } from "express";
-import { logoutAllService } from "./service";
+import { Router } from 'express';
+import { actualizarFotoPerfil } from '../../controllers/userManagement/fotoPefil.controller';
 
-export const logoutAllController = async (req: Request, res: Response) => {
-  try {
-    const token = req.headers.authorization?.split(" ")[1];
-    if (!token) {
-      return res.status(401).json({ success: false, message: "Token no proporcionado" });
-    }
+const router = Router();
 
-    const result = await logoutAllService(token);
-    res.json(result);
-  } catch (error: any) {
-    console.error("Error cerrando sesiones:", error);
-    res.status(500).json({ success: false, message: error.message || "Error del servidor" });
-  }
-};
+// PUT porque estamos actualizando un dato existente
+router.put('/usuarios/foto', actualizarFotoPerfil);
+
+export default router;

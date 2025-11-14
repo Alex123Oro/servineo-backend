@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { updateUserPhoto } from './service';
+import { updateUserPhoto } from '../../../services/userManagement/fotoPerfil.service';
 
 export async function actualizarFotoPerfil(req: Request, res: Response) {
   try {

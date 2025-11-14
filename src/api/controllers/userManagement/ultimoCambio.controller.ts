@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { consultarUltimoCambioService } from "./service";
+import { consultarUltimoCambioService } from "../../../services/userManagement/ultimoCambio.service";
 
 const JWT_SECRET = process.env.JWT_SECRET || "servineosecretkey";
 

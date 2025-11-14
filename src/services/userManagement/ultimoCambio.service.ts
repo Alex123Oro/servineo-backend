@@ -1,7 +1,7 @@
 import { connectDB } from "../../config/db/mongodb";
 import { ObjectId } from "mongodb";
 
-// 🆕 FUNCIÓN para verificar si tiene contraseña en cualquier estructura
+// FUNCIÓN para verificar si tiene contraseña en cualquier estructura
 const tienePassword = (usuario: any): boolean => {
   // Verificar en authProviders (estructura nueva)
   const emailProvider = usuario.authProviders?.find((provider: any) => provider.provider === "email");
@@ -17,7 +17,7 @@ const tienePassword = (usuario: any): boolean => {
   return false;
 };
 
-// 🆕 FUNCIÓN para obtener fecha de último cambio
+// FUNCIÓN para obtener fecha de último cambio
 const obtenerFechaUltimoCambio = (usuario: any): Date | null => {
   // 1. Buscar en lastPasswordChange (más reciente)
   if (usuario.lastPasswordChange) {
@@ -42,7 +42,7 @@ export const consultarUltimoCambioService = async (userId: string) => {
   try {
     const db = await connectDB();
     
-    // 🆕 BUSCAR con ambas estructuras
+    // BUSCAR con ambas estructuras
     const usuario = await db.collection("users").findOne(
       { _id: new ObjectId(userId) },
       { 
@@ -82,7 +82,7 @@ export const consultarUltimoCambioService = async (userId: string) => {
       fechaFormateada = 'Sin contraseña (login social)';
     }
 
-    // 🔍 INFORMACIÓN ADICIONAL para debugging
+    // INFORMACIÓN ADICIONAL para debugging
     const emailProvider = usuario.authProviders?.find((provider: any) => provider.provider === "email");
     const estructuraDetalle = {
       tienePasswordAntiguo: !!usuario.password,
@@ -101,7 +101,7 @@ export const consultarUltimoCambioService = async (userId: string) => {
       hasPassword: hasPassword,
       lastPasswordChange: fechaCambio,
       fechaFormateada: fechaFormateada,
-      // 🆕 DATOS ADICIONALES para debugging
+      // DATOS ADICIONALES para debugging
       estructura: estructuraDetalle
     };
 

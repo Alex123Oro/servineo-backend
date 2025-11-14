@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { generarToken } from "../../../utils/generadorToken";
-import { getDiscordUser, findUserByEmail, createUserDiscord } from "./service";
+import { getDiscordUser, findUserByEmail, createUserDiscord } from "../../../services/userManagement/discord.service";
 
 export async function discordAuth(req: Request, res: Response) {
   const { code } = req.query;

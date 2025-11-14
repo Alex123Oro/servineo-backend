@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import { generarToken } from "../../../utils/generadorToken";
-import { getGitHubUser, findUserByEmail, createUser } from "./service";
+import { getGitHubUser, findUserByEmail, createUser } from "../../../services/userManagement/github.service";
 import clientPromise from "../../../config/db/mongodb";
 import { ObjectId } from "mongodb";
 

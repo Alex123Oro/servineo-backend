@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { logoutAllService } from "./service";
+import { logoutAllService } from "../../../services/userManagement/cerrarSesiones.service";
 
 export const logoutAllController = async (req: Request, res: Response) => {
   try {

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ObjectId } from "mongodb";
-import { getClientById} from "./service";
+import { getClientById} from "../../../services/userManagement/cliente.service";
 import bcrypt from "bcryptjs";
 import clientPromise from "../../../config/db/mongodb";
 

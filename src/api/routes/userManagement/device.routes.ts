@@ -1,4 +1,4 @@
-// src/modules/controlC/HU6/device.routes.ts
+
 import { Router } from "express";
 import { registerDevice, getDevices } from "../../controllers/userManagement/device.controller";
 

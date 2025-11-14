@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { cambiarContrasenaService } from "./service";
+import { cambiarContrasenaService } from "../../../services/userManagement/editarContraseña.service";
 
 export const cambiarContrasena = async (req: Request, res: Response) => {
   try {

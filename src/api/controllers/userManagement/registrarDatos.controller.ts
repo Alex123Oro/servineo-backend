@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { generarToken } from '../../../utils/generadorToken';
-import { checkUserExists, createManualUser, getUserById } from './service';
-import { updateUserPhoto } from '../fotoPerfil/service';
+import { checkUserExists, createManualUser, getUserById } from '../../../services/userManagement/registrarDatos.service';
+import { updateUserPhoto } from '../../../services/userManagement/fotoPerfil.service';
 
 export async function manualRegister(req: Request, res: Response) {
   const { name, email, password } = req.body;

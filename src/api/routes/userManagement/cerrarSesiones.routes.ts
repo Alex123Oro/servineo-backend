@@ -1,5 +1,5 @@
 import express from "express";
-import { verifyJWT } from "../../HU3/google/authMiddleware";
+import { verifyJWT } from "../../../middlewares/authMiddleware";
 import { logoutAllController } from "../../controllers/userManagement/cerrarSesion.controller";
 
 const router = express.Router();

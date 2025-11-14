@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { loginUsuario, loginGoogle } from "../../controllers/userManagement/login.controller";
-import { forgotPassword, magicLogin } from "../../controllers/userManagement/forgot,controller";
+import { forgotPassword, magicLogin } from "../../controllers/userManagement/forgot.controller";
 
 const router = Router();
 

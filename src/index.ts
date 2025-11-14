@@ -9,7 +9,7 @@ dotenv.config({ path: '.env' });
 
 import registrarDatosRouter from '../src/api/routes/userManagement/registrarDatos.routes';
 import fotoPerfilRouter from '../src/api/routes/userManagement/fotoPerfil.routes';
-import googleRouter from "../src/api/routes/userManagement/google.controller";
+import googleRouter from "../src/api/routes/userManagement/google.routes";
 import ubicacionRouter from "../src/api/routes/userManagement/ubicacion.routes"; 
 import authRouter from "../src/api/routes/userManagement/login.routes"; 
 import modificarDatosRouter from '../src/api/routes/userManagement/modificarDatos.routes';
@@ -40,8 +40,7 @@ app.use('/api/controlC/sugerencias', nominatimRouter);
 app.use('/api/controlC/cambiar-contrasena', cambiarContrasenaRouter);
 app.use('/api/controlC/cerrar-sesiones', cerrarSesionesRouter);
 app.use('/api/controlC/ultimo-cambio', ultimoCambioRouter);
-
-////////////////////
+app.use('/api/controlC/foto-perfil', fotoPerfilRouter);
 app.use('/api/controlC/obtener-password', obtenerContrasenaRouter);
 app.use('/auth', githubAuthRouter);
 app.use('/auth', discordRoutes);
@@ -49,4 +48,5 @@ app.use('/api/controlC/cliente', clienteRouter);
 export const registerRoutes = (app: any) => {
   app.use('/devices', deviceRouter);
 };
+
 app.listen(8000, () => console.log('Servidor corriendo en puerto 8000'));

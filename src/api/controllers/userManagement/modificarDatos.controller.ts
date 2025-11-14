@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { obtenerDatosUsuarioService, actualizarDatosUsuarioService } from "./service";
+import { obtenerDatosUsuarioService, actualizarDatosUsuarioService } from "../../../services/userManagement/modificarDatos.service";
 
 export const obtenerDatosUsuario = async (req: Request, res: Response) => {
   const authHeader = req.headers.authorization;

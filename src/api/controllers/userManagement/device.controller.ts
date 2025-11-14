@@ -1,6 +1,6 @@
-// src/modules/controlC/HU6/device.controller.ts
+
 import { Request, Response } from "express";
-import { Device } from "./device.model";
+import { Device } from "../../../models/divice.model";
 
 export const registerDevice = async (req: Request, res: Response) => {
   try {

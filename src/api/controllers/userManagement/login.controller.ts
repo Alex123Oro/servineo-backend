@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { connectDB } from '../../../config/db/mongodb';
 import bcrypt from 'bcryptjs';
 import { generarToken } from '../../../utils/generadorToken';
-import { googleAuth } from '../../HU3/google/controller';
+import { googleAuth } from '../userManagement/google.controller';
 import { ObjectId } from 'mongodb';
 
 export const loginUsuario = async (req: Request, res: Response) => {

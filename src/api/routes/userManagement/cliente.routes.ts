@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { verifyClientJWT } from "./verificar";
+import { verifyClientJWT } from "../../../middlewares/verificar";
 import {
   getClientProfile,
   unlinkLoginMethod,
