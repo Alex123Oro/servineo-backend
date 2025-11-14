@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { connectDB } from '../../../config/db/mongodb';
+import { connectDB } from '../../../config/db/mongoClient';
 import bcrypt from 'bcryptjs';
 import { generarToken } from '../../../utils/generadorToken';
 import { googleAuth } from '../userManagement/google.controller';
