@@ -1,5 +1,5 @@
 
-import { SERVER_PORT } from './config/env.config';
+import { SERVER_PORT } from './config/env.config.js';
 import app from './app';
 import { connectDatabase } from './config/db.config';
 import { startJobsStatusCollectorCron } from './services/jobs-status-collector.cron';
