@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { manualRegister } from '../../controllers/userManagement/registrarDatos.controller';
+import { manualRegister } from '../../controllers/userManagement/registrarDatos.controller.js';
 
 const router = Router();
 
