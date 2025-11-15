@@ -1,7 +1,7 @@
 // src/index.ts
 // This file is deprecated. Use src/server.ts instead.
 // Kept for backwards compatibility during migration.
-import './server,js';
+import './server.js';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
