@@ -7,21 +7,21 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config({ path: '.env' });
 
-import registrarDatosRouter from './api/routes/userManagement/registrarDatos.routes';
-import fotoPerfilRouter from './api/routes/userManagement/fotoPerfil.routes';
-import googleRouter from './api/routes/userManagement/google.routes';
-import ubicacionRouter from './api/routes/userManagement/ubicacion.routes'; 
-import authRouter from './api/routes/userManagement/login.routes'; 
-import modificarDatosRouter from './api/routes/userManagement/modificarDatos.routes';
-import nominatimRouter from './api/routes/userManagement/sugerencias.routes'; 
-import deviceRouter from './api/routes/userManagement/device.routes';
-import cambiarContrasenaRouter from './api/routes/userManagement/editarContraseña.routes';
-import cerrarSesionesRouter from './api/routes/userManagement/cerrarSesiones.routes';
-import ultimoCambioRouter from './api/routes/userManagement/ultimoCambio.routes';
-import githubAuthRouter from './api/routes/userManagement/github.routes';
-import discordRoutes from './api/routes/userManagement/discord.routes';
-import clienteRouter from './api/routes/userManagement/cliente.routes';
-import obtenerContrasenaRouter from './api/routes/userManagement/obtener.routes';
+import registrarDatosRouter from './api/routes/userManagement/registrarDatos.routes.js';
+import fotoPerfilRouter from './api/routes/userManagement/fotoPerfil.routes.js';
+import googleRouter from './api/routes/userManagement/google.routes.js';
+import ubicacionRouter from './api/routes/userManagement/ubicacion.routes.js'; 
+import authRouter from './api/routes/userManagement/login.routes.js'; 
+import modificarDatosRouter from './api/routes/userManagement/modificarDatos.routes.js';
+import nominatimRouter from './api/routes/userManagement/sugerencias.routes.js'; 
+import deviceRouter from './api/routes/userManagement/device.routes.js';
+import cambiarContrasenaRouter from './api/routes/userManagement/editarContraseña.routes.js';
+import cerrarSesionesRouter from './api/routes/userManagement/cerrarSesiones.routes.js';
+import ultimoCambioRouter from './api/routes/userManagement/ultimoCambio.routes.js';
+import githubAuthRouter from './api/routes/userManagement/github.routes.js';
+import discordRoutes from './api/routes/userManagement/discord.routes.js';
+import clienteRouter from './api/routes/userManagement/cliente.routes.js';
+import obtenerContrasenaRouter from './api/routes/userManagement/obtener.routes.js';
 
 
 const app = express();
