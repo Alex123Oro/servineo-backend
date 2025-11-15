@@ -9,14 +9,23 @@ interface DiscordUser {
   discordId: string;
 }
 
-interface User extends DiscordUser {
+
+interface AuthProvider {
+  provider: string; 
+  email: string;
+  discordId?: string;
+  username?: string;
+  linkedAt: Date;
+}
+
+export interface User extends DiscordUser {
   _id: ObjectId;
   role: string;
   url_photo: string;
+  authProviders?: AuthProvider[]; 
 }
 
 export async function getDiscordUser(accessToken: string): Promise<DiscordUser | null> {
-  // Get basic info
   const resp = await fetch("https://discord.com/api/users/@me", {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -24,7 +33,6 @@ export async function getDiscordUser(accessToken: string): Promise<DiscordUser |
   const data = await resp.json();
   if (!data) return null;
 
-  // ✅ email puede no venir → fallback
   const email = data.email || `${data.id}@discord.local`;
 
   return {
@@ -53,6 +61,15 @@ export async function createUserDiscord(user: DiscordUser): Promise<User> {
     email: user.email,
     url_photo: user.picture || "",
     role: "requester",
+    authProviders: [
+      {
+        provider: "discord",
+        email: user.email,
+        providerId: user.discordId,
+        username: user.name,
+        linkedAt: new Date(),
+      },
+    ],
     especialidad: "",
     telefono: "",
     certificacion: "",
@@ -67,4 +84,24 @@ export async function createUserDiscord(user: DiscordUser): Promise<User> {
     ...user,
     ...newUserDocument,
   } as User;
+}
+
+export async function linkDiscordToUser(userId: ObjectId, discordUser: any) {
+  const mongoClient = await clientPromise;
+  const db = mongoClient.db("ServineoBD");
+
+  return db.collection("users").updateOne(
+    { _id: userId },
+    {
+      $push: {
+        authProviders: {
+          provider: "discord",
+          email: discordUser.email,
+          discordId: discordUser.id,
+          username: discordUser.username,
+          linkedAt: new Date(),
+        },
+      },
+    }as any
+  );
 }

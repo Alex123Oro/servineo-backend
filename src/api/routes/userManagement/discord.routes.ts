@@ -13,9 +13,11 @@ router.get("/discord", (req, res) => {
 
   const scope = "identify email";
 
+  const state = req.query.state;
+
   const discordUrl = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(
     redirect_uri
-  )}&response_type=code&scope=${encodeURIComponent(scope)}`;
+  )}&response_type=code&scope=${encodeURIComponent(scope)}&state=${encodeURIComponent(state as string)}`;
 
   res.redirect(discordUrl);
 });
