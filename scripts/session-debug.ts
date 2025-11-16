@@ -1,7 +1,7 @@
 #!/usr/bin/env ts-node
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import { appConfig } from '../src/config/app.config.js';
+import { appConfig } from '../src/config/app.config';
 import { SearchHistory } from '../src/modules/devmaster/models/search-history.model';
 
 async function main() {

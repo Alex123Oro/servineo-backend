@@ -1,30 +1,52 @@
 import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import { generarToken } from "../../../utils/generadorToken";
-import { getDiscordUser, findUserByEmail, createUserDiscord } from "../../../services/userManagement/discord.service";
+import {
+  getDiscordUser,
+  findUserByEmail,
+  createUserDiscord,
+  linkDiscordToUser,
+
+} from "../../../services/userManagement/discord.service";
 
 export async function discordAuth(req: Request, res: Response) {
-  const { code } = req.query;
+  const { code, state } = req.query;
 
-  if (!code) return res.status(400).json({ status: "error", message: "No code provided" });
+  const FRONTEND_URL = process.env.FRONTEND_URL!;
+  const NODE_ENV = process.env.NODE_ENV || "development";
+
+  const redirect_uri =
+    NODE_ENV === "production"
+      ? `${process.env.BASE_URL}/auth/discord/callback`
+      : "http://localhost:8000/auth/discord/callback";
+
+  let mode = "login"; 
+  let token: string | null = null;
+
+  if (state) {
+    try {
+      const decodedBase64 = Buffer.from(String(state), "base64").toString("utf-8");
+      const parsed = JSON.parse(decodedBase64);
+      mode = parsed.mode || "login";
+      token = parsed.token || null;
+      console.log("State parseado:", parsed);
+    } catch (err: any) {
+      console.warn("⚠ No se pudo decodificar o parsear el state:", err.message);
+    }
+  }
+
+  if (!code) {
+    return res.status(400).send("No se recibió el código de autorización");
+  }
 
   try {
-    const CLIENT_ID = process.env.DISCORD_CLIENT_ID!;
-    const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET!;
-    const NODE_ENV = process.env.NODE_ENV || "development";
-    const FRONTEND_URL = process.env.FRONTEND_URL!;
-
-    const redirect_uri =
-      NODE_ENV === "production"
-        ? "https://backdos.vercel.app/auth/discord/callback"
-        : "http://localhost:8000/auth/discord/callback";
-
     const tokenResp = await fetch("https://discord.com/api/oauth2/token", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        code: code.toString(),
+        client_id: process.env.DISCORD_CLIENT_ID!,
+        client_secret: process.env.DISCORD_CLIENT_SECRET!,
+        code: String(code),
         grant_type: "authorization_code",
         redirect_uri,
       }),
@@ -32,13 +54,45 @@ export async function discordAuth(req: Request, res: Response) {
 
     const tokenData = await tokenResp.json();
     const accessToken = tokenData.access_token;
+
     if (!accessToken) throw new Error("No se pudo obtener access token");
 
     const discordUser = await getDiscordUser(accessToken);
-    if (!discordUser) throw new Error("No se pudo obtener info del usuario");
+    if (!discordUser) throw new Error("No se pudo obtener información del usuario Discord");
+
+    if (mode === "link" && token) {
+      console.log("🔗 Modo vinculación detectado en Discord");
+
+      let decoded: any;
+      try {
+        decoded = jwt.verify(token, process.env.JWT_SECRET!);
+        console.log("Token válido:", decoded);
+      } catch {
+        throw new Error("Token inválido o expirado");
+      }
+
+      const user = await findUserByEmail(decoded.email || decoded.id);
+      if (!user) throw new Error("Usuario no encontrado");
+
+      const alreadyLinked = user.authProviders?.some((p: any) => p.provider === "discord");
+      if (alreadyLinked) throw new Error("Ya tienes Discord vinculado");
+
+      await linkDiscordToUser(user._id, discordUser);
+
+      return res.send(`
+        <script>
+          window.opener.postMessage({
+            type: 'DISCORD_LINK_SUCCESS',
+            message: 'Cuenta Discord vinculada correctamente'
+          }, '${FRONTEND_URL}');
+          window.close();
+        </script>
+      `);
+    }
 
     let dbUser = await findUserByEmail(discordUser.email);
     let isFirstTime = false;
+
     if (!dbUser) {
       dbUser = await createUserDiscord(discordUser);
       isFirstTime = true;
@@ -51,24 +105,33 @@ export async function discordAuth(req: Request, res: Response) {
       dbUser.url_photo
     );
 
-    res.send(`
+    return res.send(`
       <script>
         window.opener.postMessage({
           type: 'DISCORD_AUTH_SUCCESS',
           token: '${sessionToken}',
-          isFirstTime: ${isFirstTime}
+          isFirstTime: ${isFirstTime},
+          user: ${JSON.stringify({
+            id: dbUser._id.toHexString(),
+            name: dbUser.name,
+            email: dbUser.email,
+            photo: dbUser.url_photo || null,
+          })}
         }, '${FRONTEND_URL}');
         window.close();
       </script>
     `);
-  } catch (err) {
-    console.error("Error en Discord OAuth:", err);
-    res.send(`
+  } catch (err: any) {
+    console.error("⚠ Error en Discord OAuth:", err.message);
+
+    const isLinkError = String(state || "").includes("link");
+
+    return res.send(`
       <script>
         window.opener.postMessage({
-          type: 'DISCORD_AUTH_ERROR',
-          message: 'Error al autenticar con Discord'
-        }, '${process.env.FRONTEND_URL}');
+          type: '${isLinkError ? "DISCORD_LINK_ERROR" : "DISCORD_AUTH_ERROR"}',
+          message: "${err.message || "Error al autenticar con Discord"}"
+        }, '${FRONTEND_URL}');
         window.close();
       </script>
     `);

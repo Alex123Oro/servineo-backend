@@ -7,17 +7,17 @@ router.get("/discord/callback", discordAuth);
 
 router.get("/discord", (req, res) => {
   const CLIENT_ID = process.env.DISCORD_CLIENT_ID!;
-  const NODE_ENV = process.env.NODE_ENV || "development";
+  const BASE_URL = process.env.BASE_URL!; 
 
-  const redirect_uri =
-    NODE_ENV === "production"
-      ? "https://backdos.vercel.app/auth/discord/callback"
-      : "http://localhost:8000/auth/discord/callback";
+  const redirect_uri = `${BASE_URL}/auth/discord/callback`;
 
   const scope = "identify email";
+
+  const state = req.query.state;
+
   const discordUrl = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(
     redirect_uri
-  )}&response_type=code&scope=${encodeURIComponent(scope)}`;
+  )}&response_type=code&scope=${encodeURIComponent(scope)}&state=${encodeURIComponent(state as string)}`;
 
   res.redirect(discordUrl);
 });

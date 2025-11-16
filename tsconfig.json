@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ES2022",       // Cambiado de ES6 a ES2022 para soportar includes, padStart, fromEntries, etc.
-    "moduleResolution": "node",
+    "target": "ES6",
     "rootDir": "./src",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "outDir": "./dist",
     "esModuleInterop": true,
     "strict": true,
-    "skipLibCheck": true,
-    "lib": ["ES2022", "DOM"]  // Añadido para que TS entienda métodos modernos de JS
+    "skipLibCheck": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
