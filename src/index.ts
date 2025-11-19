@@ -25,11 +25,16 @@ import clienteRouter from '../src/api/routes/userManagement/cliente.routes';
 
 
 import obtenerContrasenaRouter from '../src/api/routes/userManagement/obtener.routes';
+import updateProfileRouter from "../src/api/routes/userManagement/updateProfile.routes";
 
 const app = express();
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cors({ origin: [ 'http://localhost:3000', 'http://127.0.0.1:3000' ], credentials: true }));
+
 app.use(express.json());
+
+app.use('/api/controlC/usuario/update', updateProfileRouter);
+
 
 app.use('/api/controlC/google', googleRouter);
 app.use('/api/controlC/ubicacion', ubicacionRouter);
