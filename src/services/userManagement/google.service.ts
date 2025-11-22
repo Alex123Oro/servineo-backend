@@ -1,6 +1,5 @@
 import { OAuth2Client } from "google-auth-library";
-import clientPromise from "../../config/db/mongodb";
-import { ObjectId } from "mongodb";
+import { IUser, User } from "../../models/user.model";
 
 interface GoogleUser {
   email: string;
@@ -8,72 +7,83 @@ interface GoogleUser {
   picture?: string;
 }
 
-interface User extends GoogleUser {
-  _id: ObjectId;
-  role: string;
-  url_photo: string;
-}
-
+// Se crea el cliente OAuth usando la variable de entorno
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
+/**
+ * Verifica el token enviado por Google Login.
+ * Retorna los datos del usuario si es válido.
+ */
 export async function verifyGoogleToken(token: string): Promise<GoogleUser | null> {
-  const ticket = await client.verifyIdToken({
-    idToken: token,
-    audience: process.env.GOOGLE_CLIENT_ID,
-  });
+  try {
+    // Validamos el token con Google
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
 
-  const payload = ticket.getPayload();
-  if (!payload || !payload.email) return null;
+    const payload = ticket.getPayload();
+
+    if (!payload || !payload.email) return null;
+
+    // Retornamos solo lo necesario
+    return {
+      email: payload.email,
+      name: payload.name || "Sin Nombre",
+      picture: payload.picture || "",
+    };
+  } catch (error) {
+    console.error("Error al verificar token de Google:", error);
+    return null;
+  }
+}
+
+/**
+ * Busca un usuario cuyo proveedor sea Google
+ * y cuyo providerId sea el email registrado.
+ */
+export async function findUserByEmail(email: string) {
+  const user = await User.findOne({
+    "authProviders.provider": "google",
+    "authProviders.providerId": email,
+  }).lean<IUser & { _id: string }>(); // tipado explícito
+
+  if (!user) return null;
 
   return {
-    email: payload.email,
-    name: payload.name || "Sin Nombre",
-    picture: payload.picture || "",
+    ...user,
+    _id: user._id.toString(),
   };
 }
 
-export async function findUserByEmail(email: string): Promise<User | null> {
-  const mongoClient = await clientPromise;
-  const db = mongoClient.db("ServineoBD");
-  const user = await db.collection("users").findOne<User>({
-  "authProviders.provider": "google",
-  "authProviders.email": email
-});
-  return user;
-}
 
 export async function checkUserExists(email: string): Promise<boolean> {
   const user = await findUserByEmail(email);
   return !!user;
 }
 
-export async function createUser(user: GoogleUser): Promise<User> {
-  const mongoClient = await clientPromise;
-  const db = mongoClient.db("ServineoBD");
-
-  const newUserDocument = {
-    name: user.name,
-    email: user.email, 
-    url_photo: user.picture || "",
+export async function createUser(googleUser: GoogleUser) {
+  const newUser = new User({
+    name: googleUser.name,
+    email: googleUser.email,
+    url_photo: googleUser.picture || "",
     role: "requester",
-    especialidad: "",
-    telefono: "",
-    certificacion: "",
-    language: "es",
-    createdAt: new Date(),
+
     authProviders: [
       {
         provider: "google",
-        email: user.email,
+        providerId: googleUser.email,
+        password: "",
       },
     ],
-  };
+  });
 
-  const result = await db.collection("users").insertOne(newUserDocument);
-  console.log("Usuario insertado en MongoDB con authProviders:", user.email);
+  await newUser.save();
+
+  const plain = newUser.toObject();
 
   return {
-    _id: result.insertedId,
-    ...newUserDocument,
-  } as User;
+    ...plain,
+    _id: plain._id.toString(),
+  };
 }

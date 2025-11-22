@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import { verifyGoogleToken, findUserByEmail, createUser } from "../../../services/userManagement/google.service";
 import { generarToken } from "../../../utils/generadorToken";
-
-const JWT_SECRET = process.env.JWT_SECRET || "super_secret_key";
+import jwt from "jsonwebtoken";
 
 export async function googleAuth(req: Request, res: Response) {
   const { token } = req.body;
@@ -18,18 +16,21 @@ export async function googleAuth(req: Request, res: Response) {
     }
 
     let dbUser = await findUserByEmail(googleUser.email);
-const exists = !!dbUser;
+    const exists = dbUser !== null;
 
     if (!exists) {
       dbUser = await createUser(googleUser);
     }
 
     if (!dbUser) {
-      return res.status(500).json({ status: "error", message: "Error interno al obtener el usuario" });
+      return res.status(500).json({
+        status: "error",
+        message: "No se pudo obtener o crear el usuario",
+      });
     }
 
     const sessionToken = generarToken(
-      dbUser._id.toHexString(),
+      dbUser._id.toString(),
       dbUser.name,
       googleUser.email
     );
@@ -38,13 +39,14 @@ const exists = !!dbUser;
       status: exists ? "exists" : "firstTime",
       firstTime: !exists,
       user: {
-        _id: dbUser._id.toHexString(),
+        _id: dbUser._id.toString(),
         email: dbUser.email,
         name: dbUser.name,
-        picture: dbUser.url_photo, 
+        picture: dbUser.url_photo,
       },
       token: sessionToken,
     });
+
   } catch (err) {
     console.error(err);
     return res.status(500).json({ status: "error", message: "Error al autenticar con Google" });
