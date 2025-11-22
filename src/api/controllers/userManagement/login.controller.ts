@@ -108,7 +108,7 @@ export const loginGoogle = async (req: Request, res: Response) => {
     }
 
     const sessionToken = generarToken(
-      dbUser._id.toHexString(),
+      dbUser._id.toString(),
       dbUser.name,
       dbUser.email,
       dbUser.url_photo
@@ -119,7 +119,7 @@ export const loginGoogle = async (req: Request, res: Response) => {
       message: "Inicio de sesión exitoso",
       token: sessionToken,
       user: {
-        id: dbUser._id.toHexString(),
+        id: dbUser._id.toString(),
         name: dbUser.name,
         email: dbUser.email,
         picture: dbUser.url_photo,
