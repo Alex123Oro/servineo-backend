@@ -20,7 +20,7 @@ export const loginUsuario = async (req: Request, res: Response) => {
 
     const user = await usersCollection.findOne({
       'authProviders.provider': 'email',
-      'authProviders.email': email,
+      "authProviders.providerId": email
     });
 
     if (!user) {
@@ -31,17 +31,17 @@ export const loginUsuario = async (req: Request, res: Response) => {
     }
 
     const emailProvider = user.authProviders.find(
-      (p: any) => p.provider === 'email' && p.email === email
+      (p: any) => p.provider === "email" && p.providerId === email
     );
 
-    if (!emailProvider || !emailProvider.passwordHash) {
+    if (!emailProvider || !emailProvider.password) {
       return res.status(400).json({
         success: false,
         message: 'El método de correo no tiene contraseña registrada',
       });
     }
 
-    const passwordMatch = await bcrypt.compare(password, emailProvider.passwordHash);
+    const passwordMatch = await bcrypt.compare(password, emailProvider.password);
     if (!passwordMatch) {
       return res.status(401).json({
         success: false,
@@ -108,7 +108,7 @@ export const loginGoogle = async (req: Request, res: Response) => {
     }
 
     const sessionToken = generarToken(
-      dbUser._id.toHexString(),
+      dbUser._id.toString(),
       dbUser.name,
       dbUser.email,
       dbUser.url_photo
@@ -119,7 +119,7 @@ export const loginGoogle = async (req: Request, res: Response) => {
       message: "Inicio de sesión exitoso",
       token: sessionToken,
       user: {
-        id: dbUser._id.toHexString(),
+        id: dbUser._id.toString(),
         name: dbUser.name,
         email: dbUser.email,
         picture: dbUser.url_photo,
