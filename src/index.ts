@@ -23,6 +23,7 @@ import githubAuthRouter from '../src/api/routes/userManagement/github.routes';
 import discordRoutes from '../src/api/routes/userManagement/discord.routes';
 import clienteRouter from '../src/api/routes/userManagement/cliente.routes';
 
+import deleteAccountRoutes from "../src/api/routes/userManagement/deleteAccount.routes";
 
 import obtenerContrasenaRouter from '../src/api/routes/userManagement/obtener.routes';
 import updateProfileRouter from "../src/api/routes/userManagement/updateProfile.routes";
@@ -50,6 +51,8 @@ app.use('/api/controlC/obtener-password', obtenerContrasenaRouter);
 app.use('/auth', githubAuthRouter);
 app.use('/auth', discordRoutes);
 app.use('/api/controlC/cliente', clienteRouter);
+app.use("/api/controlC/usuario", deleteAccountRoutes);
+
 export const registerRoutes = (app: any) => {
   app.use('/devices', deviceRouter);
 };
