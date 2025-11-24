@@ -28,6 +28,10 @@ import clienteRouter from '../src/api/routes/userManagement/cliente.routes';
 import obtenerContrasenaRouter from '../src/api/routes/userManagement/obtener.routes';
 
 
+import deleteAccountRoutes from "../src/api/routes/userManagement/deleteAccount.routes";
+import updateProfileRouter from "../src/api/routes/userManagement/updateProfile.routes";
+
+
 const app = express();
 
 app.use(
@@ -35,8 +39,8 @@ app.use(
     origin: [
       'https://devmasters-servineo-frontend-zk3q.vercel.app',
       'http://localhost:8080',
-      'http://localhost:8081',
-      'http://localhost:3000'
+      'http://localhost:3000',
+      'http://127.0.0.1:3000',
     ],
     credentials: true,
   }),
@@ -68,6 +72,12 @@ app.use('/api/controlC/obtener-password', obtenerContrasenaRouter);
 app.use('/auth', githubAuthRouter);
 app.use('/auth', discordRoutes);
 app.use('/api/controlC/cliente', clienteRouter);
+
+
+app.use('/api/controlC/usuario/update', updateProfileRouter);
+app.use("/api/controlC/usuario", deleteAccountRoutes);
+
+
 export const registerRoutes = (app: any) => {
   app.use('/devices', deviceRouter);
 };
