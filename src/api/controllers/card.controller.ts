@@ -1,6 +1,7 @@
+import type { Request, Response } from "express";
 import Stripe from "stripe";
-import Card from "../../models/card.model";
-import User from "../../models/userPayment.model";
+import { Card } from "../../models/card.model";
+import { User } from "../../models/userPayment.model";
 import 'dotenv/config';
 
 // Validar que la clave de Stripe existe
@@ -13,7 +14,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 // =========================
 // Crear y guardar tarjeta
 // =========================
-export const createCard = async (req, res) => {
+export const createCard = async (req: Request, res: Response) => {
   try {
     const { userId, paymentMethodId, saveCard , cardholderName} = req.body;
 
@@ -61,6 +62,10 @@ export const createCard = async (req, res) => {
         invoice_settings: { default_payment_method: paymentMethod.id },
       });
 
+      if (!paymentMethod.card) {
+        return res.status(400).json({ error: "Payment method no tiene información de tarjeta" });
+      }
+
       const newCard = await Card.create({
         userId,
         stripePaymentMethodId: paymentMethod.id,
@@ -87,7 +92,7 @@ export const createCard = async (req, res) => {
 // =========================
 // Listar tarjetas de usuario
 // =========================
-export const listCards = async (req, res) => {
+export const listCards = async (req: Request, res: Response) => {
   try {
     const { userId } = req.query;
     const cards = await Card.find({ userId });

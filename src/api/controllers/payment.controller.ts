@@ -1,8 +1,9 @@
+import type { Request, Response } from "express";
 import Stripe from "stripe";
-import Payment from "../../models/payment.model";
-import Card from "../../models/card.model";
-import User from "../../models/userPayment.model";
-import Jobs from "../../models/jobsPayment.model";
+import { Payment } from "../../models/payment.model";
+import { Card } from "../../models/card.model";
+import { User } from "../../models/userPayment.model";
+import { Jobspay as Jobs } from "../../models/jobsPayment.model";
 import 'dotenv/config';
 
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -11,10 +12,10 @@ if (!process.env.STRIPE_SECRET_KEY) {
 }
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2024-06-20",
+  apiVersion: "2025-10-29.clover",
 });
 
-export const createPayment = async (req, res) => {
+export const createPayment = async (req: Request, res: Response) => {
   console.group("🧾 [createPayment] Nueva solicitud de pago");
   console.time("⏱ Duración total del proceso");
 
@@ -113,11 +114,12 @@ export const createPayment = async (req, res) => {
         automatic_payment_methods: { enabled: true, allow_redirects: "never" },
       });
       console.log("✅ PaymentIntent creado:", paymentIntent.id, "Estado:", paymentIntent.status);
-    } catch (stripeError) {
-      console.error("❌ Error al crear PaymentIntent:", stripeError.message);
+    } catch (stripeError: unknown) {
+      const errorMessage = stripeError instanceof Error ? stripeError.message : 'Error desconocido';
+      console.error("❌ Error al crear PaymentIntent:", errorMessage);
       return res.status(400).json({
         error: "Error al procesar el pago con Stripe",
-        details: stripeError.message,
+        details: errorMessage,
       });
     }
 
@@ -154,15 +156,18 @@ export const createPayment = async (req, res) => {
       payment: paymentData,
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("🔥 Error inesperado en createPayment:", error);
     console.timeEnd("⏱ Duración total del proceso");
     console.groupEnd();
 
+    const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
+    const errorStack = error instanceof Error ? error.stack : undefined;
+
     return res.status(500).json({
       error: "Error inesperado en el servidor",
-      details: error.message,
-      stack: error.stack,
+      details: errorMessage,
+      stack: errorStack,
     });
   }
 };

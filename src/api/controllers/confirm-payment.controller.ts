@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 import { Payment } from "../../models/payment.model";
 import { Comision } from "../../models/historycomission.model";
 import { Wallet } from "../../models/wallet.model";
-import Job from "../../models/jobPayment.model";
-import User from "../../models/userPayment.model"; 
-import Jobspay from "../../models/jobsPayment.model"; 
+import Job from "../../models/jobPayment.model"; // Este modelo usa export default
+import { User } from "../../models/userPayment.model"; 
+import { Jobspay } from "../../models/jobsPayment.model"; 
 
 const MAX_ATTEMPTS = 3;
 const LOCK_MINUTES = 10;
@@ -160,12 +160,12 @@ export async function confirmPaymentLab(req: Request, res: Response) {
     // ============================================
     let jobActualizado = false;
     
-    if (confirmed.jobId) {
+    if (confirmedPayment.jobId) {
       try {
-        console.log(`🔄 Actualizando status del job ${confirmed.jobId} a "Pagado"`);
+        console.log(`🔄 Actualizando status del job ${confirmedPayment.jobId} a "Pagado"`);
         
-        const jobUpdated = await jobsPays.findByIdAndUpdate(
-          confirmed.jobId,
+        const jobUpdated = await Jobspay.findByIdAndUpdate(
+          confirmedPayment.jobId,
           { 
             $set: { 
               status: "Pagado" 
@@ -178,13 +178,13 @@ export async function confirmPaymentLab(req: Request, res: Response) {
         );
 
         if (jobUpdated) {
-          console.log(`✅ Job ${confirmed.jobId} actualizado a status "Pagado"`);
+          console.log(`✅ Job ${confirmedPayment.jobId} actualizado a status "Pagado"`);
           jobActualizado = true;
         } else {
-          console.warn(`⚠️ No se encontró el job ${confirmed.jobId}`);
+          console.warn(`⚠️ No se encontró el job ${confirmedPayment.jobId}`);
         }
       } catch (jobError: any) {
-        console.error(`❌ Error actualizando job ${confirmed.jobId}:`, jobError);
+        console.error(`❌ Error actualizando job ${confirmedPayment.jobId}:`, jobError);
         // No abortamos la transacción, el pago ya se confirmó
       }
     } else {
@@ -327,13 +327,13 @@ export async function confirmPaymentLab(req: Request, res: Response) {
     return res.json({
       message: "pago confirmado exitosamente",
       data: {
-        id: String(confirmed._id),
-        total: confirmed.amount.total,
-        status: confirmed.status,
-        paidAt: confirmed.paymentDate,
+        id: String(confirmedPayment._id),
+        total: confirmedPayment.amount.total,
+        status: confirmedPayment.status,
+        paidAt: confirmedPayment.paymentDate,
         comisionProcesada: true,
         jobActualizado: jobActualizado, // ← NUEVO: Indicar si se actualizó el job
-        jobId: confirmed.jobId || null
+        jobId: confirmedPayment.jobId || null
       }
     });
 

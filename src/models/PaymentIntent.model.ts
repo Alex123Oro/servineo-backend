@@ -1,16 +1,11 @@
 import { Schema, model, models, InferSchemaType } from 'mongoose';
 
 const PaymentIntentSchema = new Schema({
-  //bookingId: { type: String, index: true, required: true, unique: true },
   bookingId: {
     type: String,
     index: true,
-    required: function (this: PaymentIntentDoc) {
-      return this.type === 'service';
-    },
-    unique: function (this: PaymentIntentDoc) {
-      return this.type === 'service';
-    },
+    required: false,
+    sparse: true,
   },
 
   providerId: { type: String, index: true, required: true },
@@ -37,6 +32,24 @@ const PaymentIntentSchema = new Schema({
     default: 'qr',
   },
   //
+});
+
+// Índice único parcial para bookingId cuando type === 'service'
+PaymentIntentSchema.index(
+  { bookingId: 1 },
+  { 
+    unique: true, 
+    sparse: true,
+    partialFilterExpression: { type: 'service' }
+  }
+);
+
+// Validación: bookingId es requerido cuando type === 'service'
+PaymentIntentSchema.pre('validate', function(next) {
+  if (this.type === 'service' && !this.bookingId) {
+    return next(new Error('bookingId is required when type is "service"'));
+  }
+  next();
 });
 
 interface PaymentIntentDoc {

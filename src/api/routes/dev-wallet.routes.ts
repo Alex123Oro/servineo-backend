@@ -11,6 +11,9 @@ const usersCollection = process.env.FIXERS_COLLECTION || 'users';
 
 // A) Ver DB y colecciones
 devWalletRouter.get('/dbinfo', async (_req, res) => {
+  if (!mongoose.connection.db) {
+    return res.status(500).json({ error: 'Database not connected' });
+  }
   const name = mongoose.connection.name;
   const cols = await mongoose.connection.db.listCollections().toArray();
   res.json({
@@ -24,6 +27,9 @@ devWalletRouter.get('/dbinfo', async (_req, res) => {
 
 // B) Buscar FIXER por email (devuelve _id del user)
 devWalletRouter.get('/wallet/find-by-email', async (req, res) => {
+  if (!mongoose.connection.db) {
+    return res.status(500).json({ error: 'Database not connected' });
+  }
   const email = String(req.query.email || '').trim();
   if (!email) return res.status(400).json({ error: 'EMAIL_REQUIRED' });
 

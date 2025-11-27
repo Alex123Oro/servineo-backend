@@ -1,10 +1,11 @@
-import Job from "../../models/jobsPayment.model";
-import User from "../../models/userPayment.model";
+import type { Request, Response } from "express";
+import { Jobspay as Job } from "../../models/jobsPayment.model";
+import { User } from "../../models/userPayment.model";
 
 // =========================
 // Listar trabajos de usuario (solo requester)
 // =========================
-export const listJobs = async (req, res) => {
+export const listJobs = async (req: Request, res: Response) => {
   try {
     const { userId } = req.query;
     console.log("🟦 [listJobs] Iniciando búsqueda de trabajos...");
@@ -55,8 +56,9 @@ export const listJobs = async (req, res) => {
     // 6️⃣ Retornar los trabajos encontrados
     res.json(jobs);
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("🔥 Error listJobs:", error);
-    res.status(500).json({ error: error.message });
+    const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
+    res.status(500).json({ error: errorMessage });
   }
 };

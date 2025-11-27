@@ -21,6 +21,9 @@ export function makeWalletCollectionByUserIdAdapter(
 ): WalletModelAdapter {
   return {
     async getWalletById(fixerId: string): Promise<WalletSlice | null> {
+      if (!mongoose.connection.db) {
+        throw new Error('Database not connected');
+      }
       const query = { [idField]: toQueryForId(fixerId) };
       const doc = await mongoose.connection.db.collection(collectionName).findOne(
         query,
@@ -45,6 +48,9 @@ export function makeWalletCollectionByUserIdAdapter(
       if (patch.flags !== undefined) $set.flags = patch.flags;
       if (patch.lastLowBalanceNotification !== undefined) $set.lastLowBalanceNotification = patch.lastLowBalanceNotification;
 
+      if (!mongoose.connection.db) {
+        throw new Error('Database not connected');
+      }
       const setOnInsert: any = { createdAt: new Date() };
       // aseguremos el campo users_id en el upsert:
       const usersIdValue = (process.env.WALLET_USER_ID_IS_OBJECTID === 'true')
