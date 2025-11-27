@@ -36,13 +36,23 @@ app.use(
   cors({
     origin: [
       'https://devmasters-servineo-frontend-zk3q.vercel.app',
+      'https://servineo-frontend-inte.onrender.com',
+      'https://servineo-frontend.onrender.com',
       'http://localhost:8080',
       'http://localhost:3000',
       'http://127.0.0.1:3000',
     ],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   }),
 );
+
+// Middleware para logging de requests (útil para debugging)
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.originalUrl} - Origin: ${req.headers.origin || 'N/A'}`);
+  next();
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -80,11 +90,20 @@ export const registerRoutes = (app: any) => {
   app.use('/devices', deviceRouter);
 };
 
+app.get('/', (_req, res) => {
+  res.send('Servineo API running');
+});
+
+app.get('/health', (_req, res) => {
+  res.json({ status: 'ok' });
+});
+
 app.use((req, res) => {
   console.log('Not found:', req.method, req.originalUrl);
   res.status(404).send({
     message: 'route not found',
   });
 });
-app.listen(8000, () => console.log('Servidor corriendo en puerto 8000'));
+
+// No iniciar el servidor aquí - se hace en server.ts
 export default app;
