@@ -17,9 +17,9 @@ import userRoutes from './routes/user.routes';
 
 import registrarDatosRouter from '../src/api/routes/userManagement/registrarDatos.routes';
 import fotoPerfilRouter from '../src/api/routes/userManagement/fotoPerfil.routes';
-import googleRouter from "../src/api/routes/userManagement/google.routes";
-import ubicacionRouter from "../src/api/routes/userManagement/ubicacion.routes";
-import authRouter from "../src/api/routes/userManagement/login.routes";
+import googleRouter from '../src/api/routes/userManagement/google.routes';
+import ubicacionRouter from '../src/api/routes/userManagement/ubicacion.routes';
+import authRouter from '../src/api/routes/userManagement/login.routes';
 import modificarDatosRouter from '../src/api/routes/userManagement/modificarDatos.routes';
 import nominatimRouter from '../src/api/routes/userManagement/sugerencias.routes';
 import deviceRouter from '../src/api/routes/userManagement/device.routes';
@@ -33,9 +33,6 @@ import obtenerContrasenaRouter from '../src/api/routes/userManagement/obtener.ro
 import portfolioRoutes from '../src/routes/portfolio.routes';
 import routerUser from './api/routes/user.routes';
 
-
-
-
 const app = express();
 
 app.use(
@@ -44,7 +41,7 @@ app.use(
       'https://devmasters-servineo-frontend-zk3q.vercel.app',
       'http://localhost:8080',
       'http://localhost:8081',
-      'http://localhost:3000'
+      'http://localhost:3000',
     ],
     credentials: true,
   }),
