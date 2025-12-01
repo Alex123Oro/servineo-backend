@@ -3,7 +3,7 @@ export const ENV = {
   MONGO_PASS: process.env.MONGO_PASS,
   MONGO_HOST: process.env.MONGO_HOST,
   MONGO_DB: process.env.MONGO_DB,
-  MONGO_URI: process.env.MONGODB_URI,
+  MONGO_URI: process.env.MONGO_URI,
 };
 
 export const appConfig = {
