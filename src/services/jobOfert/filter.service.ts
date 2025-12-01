@@ -3,17 +3,18 @@ import { getRangeRegex } from '../../utils/nameRangeHelper';
 import { validateAndNormalizeCity } from '../../utils/cityHelper';
 import { validateAndNormalizeCategory } from '../../utils/categoryHelper';
 import { FilterCommon } from '../common/filter.common';
+import type { MongoQuery, FilterOptions as BaseFilterOptions } from '../../types/common.types';
 
-export type FilterOptions = {
+export type FilterOptions = BaseFilterOptions & {
   ranges?: string[];
   city?: string;
   categories?: string[];
 };
 
-export function filterOffers(options?: FilterOptions): any {
+export function filterOffers(options?: FilterOptions): MongoQuery {
   if (!options) return {};
 
-  const filters: any = {};
+  const filters: MongoQuery = {};
 
   if (options.ranges && options.ranges.length > 0) {
     const regexes = options.ranges.map((r) => getRangeRegex(r)).filter(Boolean);

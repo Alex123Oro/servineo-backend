@@ -53,7 +53,7 @@ export function calculateTotalPages(totalItems: number, itemsPerPage: number): n
 /**
  * Valida y normaliza el número de página desde query params
  */
-export function normalizePageParam(pageParam: any, defaultPage: number = 1): number {
+export function normalizePageParam(pageParam: string | number | undefined, defaultPage: number = 1): number {
   const page = Number(pageParam);
   return !isNaN(page) && page > 0 ? page : defaultPage;
 }

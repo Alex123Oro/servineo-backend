@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
 import { Job } from '../models/job.model';
+import { getErrorMessage } from '../types/common.types';
 
 // Obtener todas las ofertas de trabajo
 export const getAllJobs = async (_req: Request, res: Response) => {
   try {
     const jobs = await Job.find();
     res.json(jobs);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 };
 
@@ -17,8 +18,8 @@ export const getJobsByFixer = async (req: Request<{ fixerId: string }>, res: Res
     const { fixerId } = req.params;
     const jobs = await Job.find({ fixerId });
     res.json(jobs);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 };
 
@@ -28,24 +29,24 @@ export const createJob = async (req: Request, res: Response) => {
     const job = new Job(req.body);
     await job.save();
     res.status(201).json(job);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+  } catch (error: unknown) {
+    res.status(400).json({ error: getErrorMessage(error) });
   }
 };
 
 // Editar una oferta de trabajo (solo fixer dueño)
-export const updateJob = async (req: Request<{ jobId: string }, {}, any>, res: Response) => {
+export const updateJob = async (req: Request<{ jobId: string }, {}, Record<string, unknown>>, res: Response) => {
   try {
     const { jobId } = req.params;
     const job = await Job.findOneAndUpdate(
-      { _id: jobId, fixerId: req.body.fixerId },
+      { _id: jobId, fixerId: (req.body as Record<string, unknown>).fixerId },
       req.body,
       { new: true }
     );
     if (!job) return res.status(404).json({ error: 'Job not found or not authorized' });
     res.json(job);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+  } catch (error: unknown) {
+    res.status(400).json({ error: getErrorMessage(error) });
   }
 };
 

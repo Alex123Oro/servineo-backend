@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { Request, Response } from "express";
 import { generarToken } from "../../../utils/generadorToken";
 import { getGitHubUser, findUserByEmail, createUser } from "../../../services/userManagement/github.service";
@@ -27,7 +27,7 @@ export async function githubAuth(req: Request, res: Response) {
         mode = parsed.mode || "login";
         token = parsed.token || null;
         console.log("State decodificado correctamente:", parsed);
-      } catch (e) {
+      } catch (_e) {
         console.warn("No se pudo parsear el parámetro 'state'");
       }
     }
@@ -54,19 +54,21 @@ export async function githubAuth(req: Request, res: Response) {
     if (mode === "link" && token) {
       console.log("🔗 Modo vinculación detectado, validando token JWT...");
 
-      let decoded: any;
+      let decoded: JwtPayload & { id?: string } | null = null;
       try {
-        decoded = jwt.verify(token, process.env.JWT_SECRET!);
+        decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload & { id?: string };
         console.log("Token válido:", decoded);
-      } catch (err: any) {
+      } catch (_err) {
         throw new Error("Token inválido o expirado");
       }
 
       const mongoClient = await clientPromise;
       const db = mongoClient.db("ServineoBD");
+      const userId = decoded?.id;
+      if (!userId) throw new Error("Token no contiene id de usuario");
       const user = await db
         .collection("users")
-        .findOne({ _id: new ObjectId(decoded.id) });
+        .findOne({ _id: new ObjectId(userId) });
 
       if (!user) throw new Error("Usuario no encontrado");
       const alreadyLinked = user.authProviders?.some(
@@ -75,7 +77,7 @@ export async function githubAuth(req: Request, res: Response) {
       if (alreadyLinked) throw new Error("Ya tiene GitHub vinculado");
 
       await db.collection("users").updateOne(
-        { _id: new ObjectId(decoded.id) },
+        { _id: new ObjectId(userId) },
         {
           $push: {
             authProviders: {

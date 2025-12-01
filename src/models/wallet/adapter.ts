@@ -8,8 +8,8 @@ export interface WalletSlice {
 }
 
 export interface WalletModelAdapter {
-  getWalletById(fixerId: string): Promise<WalletSlice | null>;
-  updateWalletById(fixerId: string, patch: Partial<WalletSlice>): Promise<void>;
+  getWalletById(_fixerId: string): Promise<WalletSlice | null>;
+  updateWalletById(_fixerId: string, _patch: Partial<WalletSlice>): Promise<void>;
 }
 
 // 👇 helper: convierte a ObjectId si es válido, sino lanza error

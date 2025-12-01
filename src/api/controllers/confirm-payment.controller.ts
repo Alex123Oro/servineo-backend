@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 import { Payment } from "../../models/payment.model";
 import { Comision } from "../../models/historycomission.model";
 import { Wallet } from "../../models/wallet.model";
-import Job from "../../models/jobPayment.model"; // Este modelo usa export default
 import { User } from "../../models/userPayment.model"; 
 import { Jobspay } from "../../models/jobsPayment.model"; 
 
@@ -320,9 +319,6 @@ export async function confirmPaymentLab(req: Request, res: Response) {
     await session.commitTransaction();
 
     console.info(`Payment ${id}: confirmado exitosamente + triggers ejecutados`);
-
-    // Devolvemos el documento 'Payment' completo y actualizado
-    const finalPaymentDoc = await Payment.findById(id).lean();
 
     return res.json({
       message: "pago confirmado exitosamente",

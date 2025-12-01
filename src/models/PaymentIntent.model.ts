@@ -52,7 +52,7 @@ PaymentIntentSchema.pre('validate', function(next) {
   next();
 });
 
-interface PaymentIntentDoc {
+interface PaymentIntentDocType {
   type: 'service' | 'wallet';
   bookingId?: string;
   method?: 'qr' | 'transfer' | 'card'; 

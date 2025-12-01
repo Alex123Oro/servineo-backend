@@ -1,8 +1,9 @@
 // services/jobOfert/sort.service.ts
 import { SortCriteria, DEFAULT_SORT_CONFIG } from '../../types/sort.types';
 import { SortService } from '../common/sort.common';
+import type { MongoQuery } from '../../types/common.types';
 
-export function sortOffers(sortBy?: string | SortCriteria): any {
+export function sortOffers(sortBy?: string | SortCriteria): MongoQuery {
   const criteria = sortBy || DEFAULT_SORT_CONFIG.sortBy;
 
   const sortConfig: Record<string, 1 | -1> = {};

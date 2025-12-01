@@ -27,10 +27,18 @@ export async function verifyGoogleToken(token: string) {
 }
 
 export async function findUserByEmail(email: string): Promise<IUser | null> {
-  return await User.findOne({
+  // Primero buscar por authProviders.provider = "google"
+  let user = await User.findOne({
     "authProviders.provider": "google",
     "authProviders.providerId": email,
   });
+  
+  // Si no encuentra, buscar directamente por email (puede ser usuario legado o de otro proveedor)
+  if (!user) {
+    user = await User.findOne({ email });
+  }
+  
+  return user;
 }
 
 export async function checkUserExists(email: string) {
@@ -38,10 +46,13 @@ export async function checkUserExists(email: string) {
 }
 
 export async function createUser(googleUser: GoogleUser) {
+  // Si googleUser.picture es un string, asegúrate de que no sea null o undefined
+  const pictureUrl = googleUser.picture && googleUser.picture.trim() ? googleUser.picture : "";
+  
   const newUser = await User.create({
     name: googleUser.name,
     email: googleUser.email,
-    url_photo: googleUser.picture || "",
+    url_photo: pictureUrl,
     role: "requester",
 
     authProviders: [

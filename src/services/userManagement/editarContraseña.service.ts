@@ -79,7 +79,7 @@ const verificarBloqueo = async (db: any, userId: string) => {
 };
 
 // FUNCIÓN para manejar intento fallido
-const manejarIntentoFallido = async (db: any, userId: string, usuario: any) => {
+const manejarIntentoFallido = async (db: any, userId: string, _usuario: any) => {
   const ahora = new Date();
   
   const usuarioActual = await db.collection("users").findOne(
@@ -87,7 +87,7 @@ const manejarIntentoFallido = async (db: any, userId: string, usuario: any) => {
     { projection: { passwordAttempts: 1 } }
   );
   
-  let attempts = usuarioActual?.passwordAttempts || { count: 0, lastAttempt: null, blockedUntil: null };
+  const attempts = usuarioActual?.passwordAttempts || { count: 0, lastAttempt: null, blockedUntil: null };
 
   attempts.count += 1;
   attempts.lastAttempt = ahora;

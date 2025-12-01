@@ -21,8 +21,7 @@ router.get("/ping", (_req, res) => {
 // Crea o reutiliza una intención por bookingId y devuelve datos + método de pago
 router.post("/intent", async (req, res) => {
   try {
-    let { bookingId, providerId, amount, currency = "BOB", deadlineMinutes = 60 } = req.body ?? {};
-    providerId = String(providerId || "").trim(); 
+    const { bookingId, providerId, amount, currency = "BOB", deadlineMinutes } = req.body ?? {};
 
     //console.log("[/intent] payload:", { bookingId, providerId, amount, currency });
 
@@ -31,11 +30,6 @@ router.post("/intent", async (req, res) => {
     if (!intent) {
       intent = await PaymentIntent.create({
         bookingId,
-        providerId,
-        amountExpected: amount,
-        currency,
-        paymentReference: generateRef(),
-        deadlineAt: new Date(Date.now() + deadlineMinutes * 60_000),
         status: "pending",
       });
     }

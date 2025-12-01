@@ -39,7 +39,7 @@ export const createCard = async (req: Request, res: Response) => {
       // Validar que el Customer realmente exista en Stripe
       try {
         await stripe.customers.retrieve(customerId);
-      } catch (error) {
+      } catch (_error) {
         // Si no existe, crear uno nuevo
         const customer = await stripe.customers.create({
           email: user.email,

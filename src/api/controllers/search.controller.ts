@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import Search from '../../models/search.model';
+import SearchModel from '../../models/search.model';
 
 // GET - Obtener todas las búsquedas
 export async function getSearches(req: Request, res: Response): Promise<void> {
   try {
-    const searches = await Search.find({}).sort({ timestamp: -1 });
+    const searches = await SearchModel.find({}).sort({ timestamp: -1 });
 
     res.status(200).json({
       success: true,
@@ -77,7 +77,7 @@ export async function createSearch(req: Request, res: Response): Promise<void> {
       timestamp: currentTimestamp,
     };
 
-    const newSearch = await Search.create(searchData);
+    const newSearch = await SearchModel.create(searchData);
 
     res.status(201).json({
       success: true,
@@ -107,7 +107,7 @@ export async function updateSearch(req: Request, res: Response): Promise<void> {
     }
 
     // Buscar el ÚLTIMO registro (más reciente) sin filtros específicos
-    const lastSearch = await Search.findOne({}).sort({ timestamp: -1 }); // Ordenar por timestamp descendente para obtener el más reciente
+    const lastSearch = await SearchModel.findOne({}).sort({ timestamp: -1 }); // Ordenar por timestamp descendente para obtener el más reciente
 
     if (!lastSearch) {
       res.status(404).json({
@@ -197,7 +197,7 @@ export async function deleteSearch(req: Request, res: Response): Promise<void> {
 
     if (id) {
       // Eliminar una búsqueda específica por ID
-      const deletedSearch = await Search.findByIdAndDelete(id);
+      const deletedSearch = await SearchModel.findByIdAndDelete(id);
 
       if (!deletedSearch) {
         res.status(404).json({
@@ -214,7 +214,7 @@ export async function deleteSearch(req: Request, res: Response): Promise<void> {
       });
     } else {
       // Si no se pasa un ID, eliminar todas las búsquedas
-      const result = await Search.deleteMany({});
+      const result = await SearchModel.deleteMany({});
 
       res.status(200).json({
         success: true,

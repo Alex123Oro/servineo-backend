@@ -36,21 +36,21 @@ export function normalizeSearchText(text: string): string {
   normalizedText = normalizedText.replace(/[óÓòÒôÔ ÓóÒòÔôÖöÕõŌōŎŏǑǒȮȯ]/g, 'o');
   normalizedText = normalizedText.replace(/[úÚùÙûÛüÜ ÚúÙùÛûÜüŨũŮůŪūŬŭǓǔU̇u̇]/g, 'u');*/
 
-  normalizedText = normalizedText.replace(/[ÁáÀàÂâÄäÃãÅåĀāĂăǍǎȦȧ]/g, 'a');
-  normalizedText = normalizedText.replace(/[ÉéÈèÊêËëĒēĔĕĚěĖė]/g, 'e');
-  normalizedText = normalizedText.replace(/[ÍíÌìÎîÏïĨĩĪīĬĭǏǐ]/g, 'i');
-  normalizedText = normalizedText.replace(/[ÓóÒòÔôÖöÕõŌōŎŏǑǒȮȯ]/g, 'o');
-  normalizedText = normalizedText.replace(/[ÚúÙùÛûÜüŨũŮůŪūŬŭǓǔU̇u̇]/g, 'u');
+  normalizedText = normalizedText.replace(/[ÁáÀàÂâÄäÃãÅåĀāĂăǍǎȦȧ]/gu, 'a');
+  normalizedText = normalizedText.replace(/[ÉéÈèÊêËëĒēĔĕĚěĖė]/gu, 'e');
+  normalizedText = normalizedText.replace(/[ÍíÌìÎîÏïĨĩĪīĬĭǏǐ]/gu, 'i');
+  normalizedText = normalizedText.replace(/[ÓóÒòÔôÖöÕõŌōŎŏǑǒȮȯ]/gu, 'o');
+  normalizedText = normalizedText.replace(/[ÚúÙùÛûÜüŨũŮůŪūŬŭǓǔU̇u̇]/gu, 'u');
   // Si necesitas manejar la ñ, puedes añadir:
   // normalizedText = normalizedText.replace(/ñ/g, 'n');
 
   // 3. CREAR EL PATRÓN DE BÚSQUEDA FLEXIBLE
   // Ahora que la entrada está limpia ('reparacion'), creamos el patrón que buscará las tildes.
-  normalizedText = normalizedText.replace(/a/g, '[aáäà]');
-  normalizedText = normalizedText.replace(/e/g, '[eéëè]');
-  normalizedText = normalizedText.replace(/i/g, '[iíïì]');
-  normalizedText = normalizedText.replace(/o/g, '[oóöò]');
-  normalizedText = normalizedText.replace(/u/g, '[uúüù]');
+  normalizedText = normalizedText.replace(/a/g, '(?:a|á|ä|à)');
+  normalizedText = normalizedText.replace(/e/g, '(?:e|é|ë|è)');
+  normalizedText = normalizedText.replace(/i/g, '(?:i|í|ï|ì)');
+  normalizedText = normalizedText.replace(/o/g, '(?:o|ó|ö|ò)');
+  normalizedText = normalizedText.replace(/u/g, '(?:u|ú|ü|ù)');
 
   // 4. Se asegura de recomponer la cadena si es necesario
   return normalizedText.normalize('NFC');

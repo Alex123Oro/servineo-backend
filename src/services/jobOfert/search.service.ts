@@ -34,7 +34,7 @@ export function searchOffersTokens(searchText?: string): any {
 }
 
 // Define la configuración de los campos y sus pesos (necesario para la firma del método)
-const WEIGHTED_FIELDS_CONFIG = [
+const _WEIGHTED_FIELDS_CONFIG = [
   { field: 'title', weight: 10 },
   { field: 'tags', weight: 8 },
   { field: 'description', weight: 5 },

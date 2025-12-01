@@ -1,5 +1,5 @@
 import { Servicio } from "../entities/Servicio";
 
 export interface ServicioRepository {
-  save(servicio: Servicio): Promise<{ insertedId: string }>;
+  save(_servicio: Servicio): Promise<{ insertedId: string }>;
 }

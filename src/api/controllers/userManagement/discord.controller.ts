@@ -29,7 +29,7 @@ export async function discordAuth(req: Request, res: Response) {
       mode = parsed.mode || "login";
       token = parsed.token || null;
       console.log("State parseado:", parsed);
-    } catch (err: any) {
+    } catch (_err) {
      // console.warn("⚠ No se pudo decodificar o parsear el state:", err.message);
     }
   }

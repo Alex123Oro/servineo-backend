@@ -9,18 +9,6 @@ const JWT_SECRET = process.env.JWT_SECRET || "super_secret_key";
 const FRONTEND_URL = process.env.FRONTEND_URL;
 const FROM_EMAIL = process.env.FROM_EMAIL || "no-reply@servineo.example";
 
-// Paleta Servineo
-const BRAND = {
-  name: "Servineo",
-  primary: "#2B31E0",       // botón / acento
-  gradientFrom: "#2B31E0",  // header izquierda
-  gradientTo: "#1AA7ED",    // header derecha
-  border: "#759AE0",        // bordes suaves
-  text: "#0F172A",          // texto principal
-  muted: "#475569",         // texto secundario
-  bg: "#FFFFFF",            // fondo
-};
-
 // SMTP
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,

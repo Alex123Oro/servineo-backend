@@ -20,7 +20,7 @@ export interface Search extends Document {
   updatedAt: Date;
 }
 
-const FilterSchema: Schema = new Schema(
+const filterSchema: Schema = new Schema(
   {
     is_reset: {
       type: Boolean,
@@ -122,5 +122,5 @@ SearchSchema.index({ user_type: 1 });
 SearchSchema.index({ search_query: 1 });
 SearchSchema.index({ timestamp: -1 });
 
-const Search = mongoose.model<Search>('search', SearchSchema);
-export default Search;
+const SearchModel = mongoose.model<Search>('search', SearchSchema);
+export default SearchModel;

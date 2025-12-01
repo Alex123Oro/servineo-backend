@@ -25,6 +25,7 @@ export async function googleAuth(req: Request, res: Response) {
     if (!exists) {
       dbUser = await createUser(googleUser) as IUser & { _id: Types.ObjectId };
     }
+    // No sobrescribir url_photo en logins posteriores - el usuario puede haber editado su foto en su perfil
 
     if (!dbUser) {
       return res.status(500).json({
@@ -33,10 +34,12 @@ export async function googleAuth(req: Request, res: Response) {
       });
     }
 
+    const pictureForToken = dbUser.url_photo || googleUser.picture || "";
     const sessionToken = generarToken(
       dbUser._id.toString(),
       dbUser.name,
-      dbUser.email
+      dbUser.email,
+      pictureForToken
     );
 
     return res.json({
@@ -46,7 +49,7 @@ export async function googleAuth(req: Request, res: Response) {
         _id: dbUser._id.toString(),
         email: dbUser.email,
         name: dbUser.name,
-        picture: dbUser.url_photo,
+        picture: dbUser.url_photo || googleUser.picture || "",
       },
       token: sessionToken,
     });

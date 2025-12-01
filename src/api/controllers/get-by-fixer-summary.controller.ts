@@ -4,7 +4,7 @@ import { Payment } from "../../models/payment.model";
 import { User as Users } from "../../models/usersPayment.model";
 import { User as UserPay } from "../../models/userPayment.model";
 
-type FixerSummaryDoc = {
+type SummaryDoc = {
   _id: mongoose.Types.ObjectId;
   fixerId: mongoose.Types.ObjectId;
   status: "paid" | "pending" | "failed";

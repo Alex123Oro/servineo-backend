@@ -20,7 +20,7 @@ export class SearchService {
   static buildWithNormalizer(
     searchText: string | undefined,
     fields: string[],
-    normalizer: (text: string) => string,
+    normalizer: (t: string) => string,
   ): any {
     if (!searchText?.trim()) return {};
 
@@ -42,7 +42,7 @@ export class SearchService {
   static buildTokenSearch(
     searchText: string | undefined,
     fields: string[],
-    normalizer?: (text: string) => string,
+    normalizer?: (t: string) => string,
   ): any {
     if (!searchText?.trim()) return {};
 
@@ -86,7 +86,7 @@ export class SearchService {
   static buildSmartSearch(
     searchText: string | undefined,
     fields: string[],
-    normalizer?: (text: string) => string,
+    normalizer?: (t: string) => string,
   ): any {
     if (!searchText?.trim()) return {};
 

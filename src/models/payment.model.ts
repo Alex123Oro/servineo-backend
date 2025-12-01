@@ -1,7 +1,7 @@
 import mongoose, { Schema, Types } from "mongoose";
 import crypto from "crypto";
 
-const paymentSchema = new mongoose.Schema({
+const schema = new mongoose.Schema({
   requesterId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   fixerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   jobId: { type: mongoose.Schema.Types.ObjectId, ref: 'Job', required: true },

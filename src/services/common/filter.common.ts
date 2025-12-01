@@ -1,7 +1,9 @@
 // services/common/filter.common.ts
+import type { MongoQuery } from '../../types/common.types';
+
 export class FilterCommon {
-  static build(filters: Record<string, any>): any {
-    const query: any = {};
+  static build(filters: Record<string, unknown>): MongoQuery {
+    const query: MongoQuery = {};
 
     Object.entries(filters).forEach(([key, value]) => {
       if (value === undefined || value === null) return;
@@ -20,7 +22,7 @@ export class FilterCommon {
     return query;
   }
 
-  static combine(...queries: any[]): any {
-    return queries.reduce((acc, query) => ({ ...acc, ...query }), {});
+  static combine(...queries: MongoQuery[]): MongoQuery {
+    return queries.reduce((acc, query) => ({ ...acc, ...query }), {} as MongoQuery);
   }
 }

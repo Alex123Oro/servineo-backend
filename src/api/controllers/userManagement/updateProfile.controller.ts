@@ -28,6 +28,26 @@ export async function updateProfileController(req: Request, res: Response) {
   } catch (err: any) {
     console.error("Error al actualizar perfil:", err);
 
+    // Errores de validación de imagen
+    if (err.message && err.message.includes('Formato no permitido')) {
+      return res.status(400).json({
+        success: false,
+        message: err.message,
+      });
+    }
+    if (err.message && err.message.includes('Archivo muy grande')) {
+      return res.status(413).json({
+        success: false,
+        message: err.message,
+      });
+    }
+    if (err.message && err.message.includes('Formato de imagen base64 inválido')) {
+      return res.status(400).json({
+        success: false,
+        message: 'La imagen debe estar en formato base64 válido.',
+      });
+    }
+
     return res.status(500).json({
       success: false,
       message: err.message || "Error interno del servidor",

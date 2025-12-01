@@ -13,11 +13,11 @@ import searchRoutes from './api/routes/search.routes';
 
 import registrarDatosRouter from './api/routes/userManagement/registrarDatos.routes';
 import fotoPerfilRouter from './api/routes/userManagement/fotoPerfil.routes';
-import googleRouter from "./api/routes/userManagement/google.routes";
-import ubicacionRouter from "./api/routes/userManagement/ubicacion.routes"; 
-import authRouter from "./api/routes/userManagement/login.routes"; 
+import googleRouter from './api/routes/userManagement/google.routes';
+import ubicacionRouter from './api/routes/userManagement/ubicacion.routes';
+import authRouter from './api/routes/userManagement/login.routes';
 import modificarDatosRouter from './api/routes/userManagement/modificarDatos.routes';
-import nominatimRouter from './api/routes/userManagement/sugerencias.routes'; 
+import nominatimRouter from './api/routes/userManagement/sugerencias.routes';
 import deviceRouter from './api/routes/userManagement/device.routes';
 import cambiarContrasenaRouter from './api/routes/userManagement/editarContraseña.routes';
 import cerrarSesionesRouter from './api/routes/userManagement/cerrarSesiones.routes';
@@ -27,8 +27,8 @@ import discordRoutes from './api/routes/userManagement/discord.routes';
 import clienteRouter from './api/routes/userManagement/cliente.routes';
 import obtenerContrasenaRouter from './api/routes/userManagement/obtener.routes';
 
-import deleteAccountRoutes from "./api/routes/userManagement/deleteAccount.routes";
-import updateProfileRouter from "./api/routes/userManagement/updateProfile.routes";
+import deleteAccountRoutes from './api/routes/userManagement/deleteAccount.routes';
+import updateProfileRouter from './api/routes/userManagement/updateProfile.routes';
 
 const app = express();
 
@@ -47,6 +47,18 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization'],
   }),
 );
+
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    const origin = req.headers.origin;
+    if (origin) res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    return res.sendStatus(204);
+  }
+  next();
+});
 
 // Middleware para logging de requests (útil para debugging)
 app.use((req, res, next) => {
@@ -76,17 +88,18 @@ app.use('/api/controlC/cambiar-contrasena', cambiarContrasenaRouter);
 app.use('/api/controlC/cerrar-sesiones', cerrarSesionesRouter);
 app.use('/api/controlC/ultimo-cambio', ultimoCambioRouter);
 app.use('/api/controlC/foto-perfil', fotoPerfilRouter);
+app.use('/api/controlC/fotoPerfil', fotoPerfilRouter);
 app.use('/api/controlC/obtener-password', obtenerContrasenaRouter);
 app.use('/auth', githubAuthRouter);
 app.use('/auth', discordRoutes);
 app.use('/api/controlC/cliente', clienteRouter);
 
-
 app.use('/api/controlC/usuario/update', updateProfileRouter);
-app.use("/api/controlC/usuario", deleteAccountRoutes);
+app.use('/api/controlC/usuario', deleteAccountRoutes);
 
+import { Express } from 'express';
 
-export const registerRoutes = (app: any) => {
+export const registerRoutes = (app: Express) => {
   app.use('/devices', deviceRouter);
 };
 

@@ -2,7 +2,11 @@
 import UAParser from 'ua-parser-js';
 
 export const parseDevice = (userAgent: string) => {
-  const parser = new (UAParser as any)(userAgent);
+  // ua-parser-js's default export may be a function; call without `new` to satisfy typings
+  // Some versions allow `new UAParser()`; types in this project mark it as callable.
+  // Use it as a function to avoid TS construct signature errors.
+  // @ts-ignore-next-line
+  const parser = (UAParser as any)(userAgent);
 
   const os = parser.getOS();
   const browser = parser.getBrowser();

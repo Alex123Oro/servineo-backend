@@ -3,11 +3,15 @@ import { debitCommission, topUp } from '../../services/wallet.service';
 import { FEATURE_NOTIFICATIONS } from '../../models/featureFlags.model';
 
 // si tienes el módulo de notifs sandbox:
-let notifyLowBalance: any;
+let notifyLowBalance: any = null;
 try {
   // evita romper si aún no existe el módulo
-  ({ notifyLowBalance } = require('../modules/notifications'));
-} catch (_) {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const mod = require('../modules/notifications') as { notifyLowBalance?: unknown };
+  if (mod && mod.notifyLowBalance) {
+    notifyLowBalance = mod.notifyLowBalance;
+  }
+} catch {
   notifyLowBalance = null;
 }
 

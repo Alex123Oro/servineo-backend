@@ -28,8 +28,8 @@ export const registerDevice = async (req: Request, res: Response) => {
 
     await Device.create({ userId, os, lastLogin: new Date() });
     res.json({ message: "Dispositivo registrado exitosamente." });
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    console.error(_error);
     res.status(500).json({ message: "Error interno al registrar dispositivo." });
   }
 };

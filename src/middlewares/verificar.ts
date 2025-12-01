@@ -1,5 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import type { JWTDecoded } from "../types/common.types";
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Express {
+    interface Request {
+      user?: JWTDecoded & { _id?: string };
+    }
+  }
+}
 
 export function verifyClientJWT(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
@@ -12,19 +22,19 @@ export function verifyClientJWT(req: Request, res: Response, next: NextFunction)
   const JWT_SECRET = process.env.JWT_SECRET || "super_secret_key";
 
   try {
-    const decoded: any = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET) as JWTDecoded;
 
     // 🔹 Normalizamos el usuario
-    (req as any).user = {
+    req.user = {
       ...decoded,
-      _id: decoded.id || decoded._id,
-      id: decoded.id || decoded._id,
+      _id: decoded.id || (decoded._id as string),
+      id: decoded.id,
       email: decoded.email,
-      nombre: decoded.nombre,
+      nombre: decoded.nombre as string,
     };
 
     next();
-  } catch (err) {
+  } catch (_err) {
     return res.status(401).json({ message: "Token inválido o expirado" });
   }
 }
