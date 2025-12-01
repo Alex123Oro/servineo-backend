@@ -1,19 +1,3 @@
-<<<<<<< HEAD
-import Server from './config/server.config.js';
-import { SERVER_PORT } from './config/env.config.js';
-
-async function startServer() {
-  try {
-    Server.listen(SERVER_PORT, () => {
-      console.info(`Server running on http://localhost:${SERVER_PORT}`);
-    });
-  } catch (error) {
-    console.error('Error starting server', error);
-  }
-}
-
-startServer();
-=======
 // src/index.ts
 // This file is deprecated. Use src/server.ts instead.
 // Kept for backwards compatibility during migration.
@@ -74,4 +58,3 @@ export const registerRoutes = (app: any) => {
 };
 
 app.listen(8000, () => console.log('Servidor corriendo en puerto 8000'));
->>>>>>> 5c02cc2fd2e57075a7aed794eecb6702d5b7c2d5
